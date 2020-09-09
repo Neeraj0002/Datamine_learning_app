@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/API/courseListRequst.dart';
@@ -112,23 +113,35 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          userLoggedIn
-              ? IconButton(
-                  color: appbarTextColorLight,
-                  icon: Icon(Icons.notifications),
-                  onPressed: () {
-                    if (Constants.email == "admin.torc@gmail.com") {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ChatRoom()));
-                    } else {
-                      sendMessage();
-                    }
-                  },
-                )
-              : Container(
+          /*userLoggedIn
+              ? */
+          IconButton(
+            color: appbarTextColorLight,
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              if (Constants.email == "admin.torc@gmail.com") {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => ChatRoom()));
+              } else {
+                sendMessage();
+              }
+            },
+          )
+          /*: Container(
                   height: 0,
                   width: 0,
-                )
+                )*/
+          ,
+          IconButton(
+            color: appbarTextColorLight,
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                settings: RouteSettings(name: "/search"),
+                builder: (context) => Search(),
+              ));
+            },
+          )
         ],
       ),
       body: FutureBuilder(

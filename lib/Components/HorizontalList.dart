@@ -43,6 +43,7 @@ class HorizontalDataList extends StatelessWidget {
                                 name: "/mentorProfile",
                               ),
                               builder: (context) => CourseDetails(
+                                outcome: dataList[index]["Outcome"]["en-US"],
                                 demoVideo: dataList[index]["Demo"] != null
                                     ? dataList[index]["Demo"]["en-US"]
                                     : null,

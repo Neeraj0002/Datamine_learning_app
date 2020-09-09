@@ -47,6 +47,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
 
+  
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/img/Logo.jpg"
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

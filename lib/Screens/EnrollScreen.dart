@@ -16,12 +16,14 @@ class EnrollScreen extends StatefulWidget {
   String courseName;
   String phone;
   String mail;
+  var coupon;
   EnrollScreen(
       {@required this.courseName,
       @required this.price,
       @required this.thumbnail,
       @required this.mail,
-      @required this.phone});
+      @required this.phone,
+      @required this.coupon});
   @override
   _EnrollScreenState createState() => _EnrollScreenState();
 }
@@ -31,6 +33,11 @@ class _EnrollScreenState extends State<EnrollScreen> {
   bool validated = true;
   Razorpay _razorpay;
   var userData;
+  String errorText;
+  bool offerFound = false;
+  double offerPercentage = 0;
+  double total;
+
   // ignore: unused_element
   _handlePaymentSuccess(PaymentSuccessResponse response) {
     showDialog(
@@ -236,7 +243,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
   _openCheckout() async {
     var options = {
       'key': 'rzp_live_PomMEWubUYJHJt',
-      'amount': widget.price * 100,
+      'amount': total * 100,
       'name': 'Datamine',
       'description': widget.courseName,
       'prefill': {'contact': "${widget.phone}", 'email': widget.mail}
@@ -251,6 +258,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
 
   @override
   void initState() {
+    total = double.parse(widget.price.toString());
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -306,100 +314,180 @@ class _EnrollScreenState extends State<EnrollScreen> {
                   price: widget.price.toString(),
                   imgUrl: widget.thumbnail),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
-                    left: 20.0,
-                  ),
-                  child: Text(
-                    "Do you have a coupon code?",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            widget.coupon != "fail"
+                ? Row(
                     children: [
-                      Container(
-                        width: constraints.maxWidth * (0.6),
-                        child: TextField(
-                          controller: couponController,
-                          onChanged: (value) {
-                            setState(() {
-                              validated = true;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            errorText: validated ? null : "Enter coupon code",
-                            errorStyle: TextStyle(color: Colors.red),
-                            focusedBorder: new OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: appBarColorlight)),
-                            enabledBorder: new OutlineInputBorder(
-                                borderSide: new BorderSide(
-                                    color: Color.fromRGBO(98, 98, 96, 1.0))),
-                            hintText: "Enter coupon code here",
-                            labelText: "Coupon Code",
-                            labelStyle: TextStyle(color: appBarColorlight),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          left: 20.0,
+                        ),
+                        child: Text(
+                          "Do you have a coupon code?",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: InkWell(
-                          onTap: () {
-                            print("Applied");
-                            setState(() {
-                              validated =
-                                  couponController.text.isEmpty ? false : true;
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            width: constraints.maxWidth * (0.25),
-                            decoration: BoxDecoration(
-                                color: appBarColorlight,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                      )
+                    ],
+                  )
+                : Container(),
+            widget.coupon != "fail"
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              width: constraints.maxWidth * (0.6),
+                              child: TextField(
+                                controller: couponController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    validated = true;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  errorText: validated ? null : errorText,
+                                  errorStyle: TextStyle(color: Colors.red),
+                                  focusedBorder: new OutlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: offerFound
+                                              ? Colors.green
+                                              : appBarColorlight)),
+                                  enabledBorder: new OutlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: offerFound
+                                              ? Colors.green
+                                              : Color.fromRGBO(
+                                                  98, 98, 96, 1.0))),
+                                  hintText: "Enter coupon code here",
+                                  labelText: "Coupon Code",
+                                  labelStyle: TextStyle(
+                                      color: offerFound
+                                          ? Colors.green
+                                          : appBarColorlight),
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 1),
-                                      color: Colors.black26,
-                                      spreadRadius: 1,
-                                      blurRadius: 2)
-                                ]),
-                            child: Center(
-                              child: Text(
-                                "Apply",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "OpenSans",
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ),
-            ),
+                            !offerFound
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(new FocusNode());
+                                        if (couponController.text.isEmpty) {
+                                          setState(() {
+                                            validated = false;
+                                            errorText = "Enter coupon code";
+                                          });
+                                          return;
+                                        }
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            child: AlertDialog(
+                                              content: Container(
+                                                height: 80,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              new AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                  appBarColorlight),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ));
+                                        print(widget.coupon);
+                                        for (int i = 0;
+                                            i < widget.coupon.length;
+                                            i++) {
+                                          if (couponController.text ==
+                                              widget.coupon[i]["Name"]
+                                                  ["en-US"]) {
+                                            offerFound = true;
+                                            offerPercentage = double.parse(
+                                                widget.coupon[i]["Offer"]
+                                                    ["en-US"]);
+                                            total = widget.price *
+                                                (offerPercentage / 100);
+                                            break;
+                                          } else {
+                                            continue;
+                                          }
+                                        }
+                                        if (offerFound) {
+                                          Navigator.pop(context);
+                                          setState(() {});
+                                        } else {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            errorText = "Offer not applied";
+                                            validated = false;
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: constraints.maxWidth * (0.25),
+                                        decoration: BoxDecoration(
+                                            color: appBarColorlight,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: Offset(0, 1),
+                                                  color: Colors.black26,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 2)
+                                            ]),
+                                        child: Center(
+                                          child: Text(
+                                            "Apply",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "OpenSans",
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    "Offer Applied",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontFamily: "OpenSans",
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                          ],
+                        );
+                      }),
+                    ),
+                  )
+                : Container(),
             Row(
               children: [
                 Padding(
@@ -459,9 +547,11 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         ),
                       ),
                       Text(
-                        "₹0",
+                        "$offerPercentage%",
                         style: TextStyle(
-                          color: Colors.black38,
+                          color: offerPercentage > 0
+                              ? Colors.green
+                              : Colors.black38,
                           fontFamily: "Roboto",
                           fontSize: 14,
                         ),
@@ -483,7 +573,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         ),
                       ),
                       Text(
-                        "₹${widget.price}",
+                        "₹$total",
                         style: TextStyle(
                           color: Colors.black,
                           fontFamily: "Roboto",

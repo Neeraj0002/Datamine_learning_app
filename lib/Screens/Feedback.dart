@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:datamine/API/feedbackRequest.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Components/customButtons.dart';
 import 'package:datamine/Components/customTextField.dart';
+import 'package:datamine/Screens/HomeScreen.dart';
 import 'package:datamine/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +67,86 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   if (_name.text.isNotEmpty) {
                     if (_email.text.isNotEmpty) {
                       if (_feedback.text.isNotEmpty) {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            child: AlertDialog(
+                              content: Container(
+                                height: 80,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  appBarColorlight),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                        feedbackAPI(context, _name.text, _email.text,
+                                _feedback.text)
+                            .then((value) {
+                          Navigator.pop(context);
+                          if (value != 'fail') {
+                            Navigator.pop(context);
+                            homeKey.currentState.showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                "Feedback submitted",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "OpenSans",
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ));
+                          } else {
+                            showDialog(
+                                context: context,
+                                child: AlertDialog(
+                                  backgroundColor: Colors.red,
+                                  title: Text(
+                                    "Failed",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "OpenSans",
+                                    ),
+                                  ),
+                                  content: Text(
+                                    "Please try again later.",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontFamily: "OpenSans",
+                                    ),
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "OpenSans",
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ));
+                          }
+                        });
                       } else {
                         showDialog(
                             context: context,

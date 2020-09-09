@@ -218,10 +218,11 @@ class _MyCoursesState extends State<MyCourses> {
             ),
           ),
           FlatButton(
-            onPressed: () => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (context) => BottomNaviBar(indexNo: 2),
-                    settings: RouteSettings(name: "/homwScreen"))),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => BottomNaviBar(indexNo: 2),
+                  settings: RouteSettings(name: "/homwScreen")));
+            },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             child: Container(
@@ -509,6 +510,8 @@ class _AllCoursesState extends State<AllCourses> {
                             name: "/CourseDetails",
                           ),
                           builder: (context) => CourseDetails(
+                            outcome: snapshot.data["data"]["All"]["courses"]
+                                [index]["Outcome"]["en-US"],
                             demoVideo: snapshot.data["data"]["All"]["courses"]
                                 [index]["Demo"]["en-US"],
                             courseName: snapshot.data["data"]["All"]["courses"]
