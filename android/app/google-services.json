@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "47209296756",
+    "firebase_url": "https://datamine-2be0e.firebaseio.com",
+    "project_id": "datamine-2be0e",
+    "storage_bucket": "datamine-2be0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47209296756:android:51ec143805b6ad8902f221",
+        "android_client_info": {
+          "package_name": "com.torcinfotech.datamine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47209296756-da35cl6bj0ilqs1tpdrqv31oqf6ee1jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuTvNdMHhHrL8tLuzdziAxzsTp9ynihmw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47209296756-da35cl6bj0ilqs1tpdrqv31oqf6ee1jf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
