@@ -1,17 +1,15 @@
 import 'dart:convert';
 
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:flutter/material.dart';
-import 'package:datamine/API/courseListRequst.dart';
 import 'package:datamine/API/purchasedCourse.dart';
 import 'package:datamine/API/resourcesRequest.dart';
 import 'package:datamine/API/testRequest.dart';
 import 'package:datamine/Components/CourseCard.dart';
 import 'package:datamine/Screens/Appdrawer.dart';
 import 'package:datamine/Screens/CourseDetails.dart';
-import 'package:datamine/Screens/Login.dart';
 import 'package:datamine/Screens/PurchasedCourseDetail.dart';
-import 'package:datamine/Screens/SignUp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
@@ -88,7 +86,7 @@ class _MyCoursesState extends State<MyCourses> {
     }
   }
 
-  _loginScreen(BuildContext context) {
+  /*_loginScreen(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -188,6 +186,63 @@ class _MyCoursesState extends State<MyCourses> {
                     "Sign Up",
                     style: TextStyle(
                         color: appBarColorlight, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }*/
+
+  _loginScreen(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Text(
+                "You are not logged in",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "OpenSans",
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) => BottomNaviBar(indexNo: 2),
+                    settings: RouteSettings(name: "/homwScreen"))),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width * (0.5),
+              decoration: BoxDecoration(
+                  color: appBarColorlight,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 1),
+                        spreadRadius: 1,
+                        blurRadius: 2)
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
