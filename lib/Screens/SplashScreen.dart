@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/constants.dart';
@@ -23,47 +24,46 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString("userData");
 
-    courseListAPI().then((value) {
-      if (value != "fail") {
-        prefs.setString("courseListData", jsonEncode(value)).then(
-            (value) => Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  settings: RouteSettings(name: "/homeScreen"),
-                  builder: (context) => BottomNaviBar(
-                    indexNo: 0,
-                  ),
-                )));
-      } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          settings: RouteSettings(name: "/homeScreen"),
-          builder: (context) => AppCrashed(),
-        ));
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        prefs.setBool("connected", true).then((value) {
+          courseListAPI().then((value) {
+            if (value != "fail") {
+              prefs.setString("courseListData", jsonEncode(value)).then(
+                  (value) =>
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        settings: RouteSettings(name: "/homeScreen"),
+                        builder: (context) => BottomNaviBar(
+                          indexNo: 0,
+                        ),
+                      )));
+            } else {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                settings: RouteSettings(name: "/homeScreen"),
+                builder: (context) => AppCrashed(),
+              ));
+            }
+          });
+        });
       }
-    });
-    /*sliderListAPI().then((value) {
-      prefs
-          .setString("sliderList", value != "fail" ? jsonEncode(value) : value)
-          .then((value) {
-        if (id != null) {
-          Timer(
-              Duration(milliseconds: 1000),
-              () => {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      settings: RouteSettings(name: "/homeScreen"),
-                      builder: (context) => BottomNaviBar(),
-                    ))
-                  });
-        } else {
-          Timer(
-              Duration(milliseconds: 1000),
-              () => {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      settings: RouteSettings(name: "/loginScreen"),
-                      builder: (context) => LoginScreen(),
-                    ))
-                  });
-        }
+    } on SocketException catch (_) {
+      prefs.setBool("connected", false).then((value) {
+        Timer(
+            Duration(
+              seconds: 2,
+            ), () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            settings: RouteSettings(name: "/homeScreen"),
+            builder: (context) => BottomNaviBar(
+              indexNo: 0,
+            ),
+          ));
+        });
       });
-    });*/
+      print('not connected');
+    }
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/Search.dart';
@@ -30,6 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DatabaseMethods databaseMethods = DatabaseMethods();
   bool userLoggedIn = false;
+  bool connected = false;
   Future setNameAndID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = prefs.getString("userData");
@@ -86,9 +88,35 @@ class _HomeScreenState extends State<HomeScreen> {
     return parsedData;
   }
 
+  Future checkConnectivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool connection;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connection = true;
+        prefs.setBool("connected", true).then((value) {});
+      }
+    } on SocketException catch (_) {
+      connection = false;
+      prefs.setBool("connected", false).then((value) {
+        setState(() {});
+      });
+      print('not connected');
+    }
+    return connection;
+  }
+
   @override
   void initState() {
     checkUserLoggedIn();
+    checkConnectivity().then((value) {
+      setState(() {
+        connected = value;
+      });
+    });
+
     super.initState();
   }
 
@@ -101,13 +129,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: appBarColorlight,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          color: appbarTextColorLight,
-          onPressed: () {
-            homeKey.currentState.openDrawer();
-          },
-        ),
+        leading: connected
+            ? IconButton(
+                icon: Icon(Icons.menu),
+                color: appbarTextColorLight,
+                onPressed: () {
+                  homeKey.currentState.openDrawer();
+                },
+              )
+            : Container(),
         title: Text(
           "Datamine",
           style: TextStyle(color: Colors.white),
@@ -115,171 +145,200 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           /*userLoggedIn
               ? */
-          IconButton(
-            color: appbarTextColorLight,
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              if (Constants.email == "admin.torc@gmail.com") {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => ChatRoom()));
-              } else {
-                sendMessage();
-              }
-            },
-          )
-          /*: Container(
-                  height: 0,
-                  width: 0,
-                )*/
-          ,
-          IconButton(
-            color: appbarTextColorLight,
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                settings: RouteSettings(name: "/search"),
-                builder: (context) => Search(),
-              ));
-            },
-          )
+          connected
+              ? IconButton(
+                  color: appbarTextColorLight,
+                  icon: Icon(Icons.notifications),
+                  onPressed: () {
+                    if (Constants.email == "admin.torc@gmail.com") {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => ChatRoom()));
+                    } else {
+                      sendMessage();
+                    }
+                  },
+                )
+              : Container(),
+          connected
+              ? IconButton(
+                  color: appbarTextColorLight,
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      settings: RouteSettings(name: "/search"),
+                      builder: (context) => Search(),
+                    ));
+                  },
+                )
+              : Container(),
         ],
       ),
       body: FutureBuilder(
-          future: getCourseListData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              if (snapshot.data != 'fail') {
-                return ListView(
-                  children: [
-                    FutureBuilder(
-                      future: sliderListAPI(),
-                      builder: (context, imageSnapshot) {
-                        if (imageSnapshot.connectionState ==
-                                ConnectionState.done &&
-                            imageSnapshot.hasData) {
-                          return ImageSlider(
-                              imgUrls: imageSnapshot.data["data"]["images"]);
-                        } else {
-                          return ImageSliderPlaceHolder();
-                        }
-                      },
-                    ),
-                    Column(children: [
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["Web Development"],
-                          title: "Web Development"),
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["App Development"],
-                          title: "App Development"),
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["Blockchain"],
-                          title: "Blockchain"),
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["ML & AI"],
-                          title: "ML & AI"),
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["Data Science"],
-                          title: "Data Science"),
-                      HorizontalDataList(
-                          dataList: snapshot.data["data"]["Categories"]
-                              ["Others"],
-                          title: "Others")
-                    ]),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: () {
-                          LaunchReview.launch(
-                              androidAppId: "com.torcinfotech.datamine",
-                              writeReview: false);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                spreadRadius: 1,
-                                blurRadius: 2,
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+          future: checkConnectivity(),
+          builder: (context, connectionSnapshot) {
+            if (connectionSnapshot.hasData) {
+              if (connectionSnapshot.data) {
+                return FutureBuilder(
+                    future: getCourseListData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        if (snapshot.data != 'fail') {
+                          return ListView(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                      5,
-                                      (index) => Icon(
-                                            Icons.star,
-                                            color: appbarTextColorLight,
-                                            size: 30,
-                                          )),
-                                ),
+                              FutureBuilder(
+                                future: sliderListAPI(),
+                                builder: (context, imageSnapshot) {
+                                  if (imageSnapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      imageSnapshot.hasData) {
+                                    return ImageSlider(
+                                        imgUrls: imageSnapshot.data["data"]
+                                            ["images"]);
+                                  } else {
+                                    return ImageSliderPlaceHolder();
+                                  }
+                                },
                               ),
-                              Container(
-                                height: 60,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: appBarColorlight,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15))),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Rate this app   ",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "OpenSans",
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                      Text(
-                                        ":)",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "OpenSans",
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 30),
-                                      ),
-                                    ],
+                              Column(children: [
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["Web Development"],
+                                    title: "Web Development"),
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["App Development"],
+                                    title: "App Development"),
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["Blockchain"],
+                                    title: "Blockchain"),
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["ML & AI"],
+                                    title: "ML & AI"),
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["Data Science"],
+                                    title: "Data Science"),
+                                HorizontalDataList(
+                                    dataList: snapshot.data["data"]
+                                        ["Categories"]["Others"],
+                                    title: "Others")
+                              ]),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    LaunchReview.launch(
+                                        androidAppId:
+                                            "com.torcinfotech.datamine",
+                                        writeReview: false);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: List.generate(
+                                                5,
+                                                (index) => Icon(
+                                                      Icons.star,
+                                                      color:
+                                                          appbarTextColorLight,
+                                                      size: 30,
+                                                    )),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 60,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              color: appBarColorlight,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "Rate this app   ",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: "OpenSans",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                                Text(
+                                                  ":)",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: "OpenSans",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 30),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
+                          );
+                        } else {
+                          return Center(
+                            child: Text(
+                              "Something went wrong",
+                            ),
+                          );
+                        }
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                                appBarColorlight),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
+                        );
+                      }
+                    });
               } else {
                 return Center(
                   child: Text(
-                    "Something went wrong",
+                    "You are not connected.",
                   ),
                 );
               }
             } else {
               return Center(
-                child: CircularProgressIndicator(
-                  valueColor:
-                      new AlwaysStoppedAnimation<Color>(appBarColorlight),
-                ),
+                child: CircularProgressIndicator(),
               );
             }
           }),

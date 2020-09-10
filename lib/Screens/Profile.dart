@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,27 @@ class _ProfileState extends State<Profile> {
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
   bool login = true;
+
+  Future checkConnectivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool connection;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connection = true;
+        prefs.setBool("connected", true).then((value) {});
+      }
+    } on SocketException catch (_) {
+      connection = false;
+      prefs.setBool("connected", false).then((value) {
+        setState(() {});
+      });
+      print('not connected');
+    }
+    return connection;
+  }
+
   Future singUpFirebase() async {
     String status = "fail";
     await authService
@@ -324,20 +346,37 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data == "notLoggedIn") {
-              return _loginScreen(context);
+        future: checkConnectivity(),
+        builder: (context, connectionSnapshot) {
+          if (connectionSnapshot.hasData) {
+            if (connectionSnapshot.data) {
+              return FutureBuilder(
+                  future: getUserData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data == "notLoggedIn") {
+                        return _loginScreen(context);
+                      } else {
+                        return _profileScreen(context);
+                      }
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                              appBarColorlight),
+                        ),
+                      );
+                    }
+                  });
             } else {
-              return _profileScreen(context);
+              return Center(
+                child: Text(
+                  "You are not connected",
+                ),
+              );
             }
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(appBarColorlight),
-              ),
-            );
+            return Container();
           }
         });
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
@@ -11,6 +12,7 @@ import 'package:datamine/API/testRequest.dart';
 import 'package:datamine/Components/CourseCard.dart';
 import 'package:datamine/Screens/Appdrawer.dart';
 import 'package:datamine/Screens/CourseDetails.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
@@ -23,6 +25,37 @@ class MainCourses extends StatefulWidget {
 }
 
 class _MainCoursesState extends State<MainCourses> {
+  bool _connected = false;
+  Future checkConnectivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool connection;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connection = true;
+        prefs.setBool("connected", true).then((value) {});
+      }
+    } on SocketException catch (_) {
+      connection = false;
+      prefs.setBool("connected", false).then((value) {
+        setState(() {});
+      });
+      print('not connected');
+    }
+    return connection;
+  }
+
+  @override
+  void initState() {
+    checkConnectivity().then((value) {
+      setState(() {
+        _connected = value;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -35,13 +68,15 @@ class _MainCoursesState extends State<MainCourses> {
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: appBarColorlight,
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              color: appbarTextColorLight,
-              onPressed: () {
-                myCourses.currentState.openDrawer();
-              },
-            ),
+            leading: _connected
+                ? IconButton(
+                    icon: Icon(Icons.menu),
+                    color: appbarTextColorLight,
+                    onPressed: () {
+                      myCourses.currentState.openDrawer();
+                    },
+                  )
+                : Container(),
             title: Text(
               "Courses",
               style: TextStyle(color: Colors.white),
@@ -59,7 +94,24 @@ class _MainCoursesState extends State<MainCourses> {
               ],
             ),
           ),
-          body: TabBarView(children: [AllCourses(), MyCourses(this)])),
+          body: TabBarView(children: [
+            FutureBuilder(
+                future: checkConnectivity(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data) {
+                      return AllCourses();
+                    } else {
+                      return Center(
+                        child: Text("You are not connected"),
+                      );
+                    }
+                  } else {
+                    return Container();
+                  }
+                }),
+            MyCourses(this)
+          ])),
     );
   }
 }
@@ -87,115 +139,10 @@ class _MyCoursesState extends State<MyCourses> {
     }
   }
 
-  /*_loginScreen(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Text(
-                "You are not logged in",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: "OpenSans",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          FlatButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => LoginScreen(
-                      fromProfile: false,
-                      fromSignUp: false,
-                      fromMyCourse: true,
-                      parent: widget.parent,
-                    ),
-                settings: RouteSettings(name: "/login"))),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Container(
-              width: MediaQuery.of(context).size.width * (0.5),
-              decoration: BoxDecoration(
-                  color: appBarColorlight,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 1),
-                        spreadRadius: 1,
-                        blurRadius: 2)
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Text(
-                "--OR--",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: "OpenSans",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          FlatButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SignUpScreen(
-                      fromLogin: false,
-                      fromMyCourse: true,
-                      fromProfile: false,
-                      parent: widget.parent,
-                    ),
-                settings: RouteSettings(name: "/signup"))),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Container(
-              width: MediaQuery.of(context).size.width * (0.5),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 1),
-                        spreadRadius: 1,
-                        blurRadius: 2)
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        color: appBarColorlight, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
+  Future setDir() async {
+    var mainDir = await getApplicationDocumentsDirectory();
+    return mainDir.path;
+  }
 
   _loginScreen(BuildContext context) {
     return Scaffold(
@@ -261,6 +208,36 @@ class _MyCoursesState extends State<MyCourses> {
     return checkDownload;
   }
 
+  Future checkConnectivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool connection;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connection = true;
+        prefs.setBool("connected", true).then((value) {});
+      }
+    } on SocketException catch (_) {
+      connection = false;
+      prefs.setBool("connected", false).then((value) {
+        setState(() {});
+      });
+      print('not connected');
+    }
+    return connection;
+  }
+
+  Future getStoredCoursesList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("purchasedCourseList");
+  }
+
+  Future getStoredResourceList(String keyValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(keyValue);
+  }
+
   @override
   void initState() {
     getUserData();
@@ -271,222 +248,384 @@ class _MyCoursesState extends State<MyCourses> {
   Widget build(BuildContext context) {
     return loggedIn
         ? FutureBuilder(
-            future: purchasedCourseListAPI(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                if (snapshot.data != 'fail') {
-                  if (snapshot.data["data"]["batch"].length != 0) {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {});
-                      },
-                      child: ListView(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        children: List.generate(
-                            snapshot.data["data"]["batch"].length, (index) {
-                          return CourseCard3(
-                            action: () {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  child: AlertDialog(
-                                    content: Container(
-                                      height: 80,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: Container(
-                                              height: 30,
-                                              width: 30,
-                                              child: CircularProgressIndicator(
-                                                valueColor:
-                                                    new AlwaysStoppedAnimation<
-                                                            Color>(
-                                                        appBarColorlight),
+            future: checkConnectivity(),
+            builder: (context, connectionSnapshot) {
+              if (connectionSnapshot.hasData) {
+                if (connectionSnapshot.data) {
+                  return FutureBuilder(
+                      future: purchasedCourseListAPI(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          if (snapshot.data != 'fail') {
+                            if (snapshot.data["data"]["batch"].length != 0) {
+                              return RefreshIndicator(
+                                onRefresh: () async {
+                                  setState(() {});
+                                },
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  physics: BouncingScrollPhysics(),
+                                  children: List.generate(
+                                      snapshot.data["data"]["batch"].length,
+                                      (index) {
+                                    return CourseCard3(
+                                      action: () {
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            child: AlertDialog(
+                                              content: Container(
+                                                height: 80,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              new AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                  appBarColorlight),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ));
+                                        resourceAPI(
+                                                snapshot.data["data"]["course"]
+                                                    [index],
+                                                snapshot.data["data"]["batch"]
+                                                        [index]
+                                                    .toString())
+                                            .then((value) async {
+                                          if (value != "fail") {
+                                            SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            //STORE RESOURCE RESULT
+                                            prefs
+                                                .setString(
+                                                    "${snapshot.data["data"]["course"][index]}_Resources_$index",
+                                                    jsonEncode(value))
+                                                .then((storedResult) {
+                                              testAPI().then((testValue) {
+                                                if (testValue != "fail") {
+                                                  getDownloadLog(value[0]
+                                                          ["UniqueId"]["en-US"])
+                                                      .then((downloadValue) {
+                                                    setDir()
+                                                        .then((mainDirValue) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        settings: RouteSettings(
+                                                          name:
+                                                              "/mentorProfile",
+                                                        ),
+                                                        builder: (context) =>
+                                                            PurchasedCourseDetailsWithDownload(
+                                                          mainDir: mainDirValue,
+                                                          courseName: snapshot
+                                                                  .data["data"]
+                                                              ["course"][index],
+                                                          batchNo: snapshot
+                                                                  .data["data"]
+                                                              ["batch"][index],
+                                                          resourceData: value,
+                                                          testData: testValue,
+                                                          fromDownloads:
+                                                              downloadValue ==
+                                                                      null
+                                                                  ? false
+                                                                  : downloadValue,
+                                                        ),
+                                                      ));
+                                                    });
+                                                  });
+                                                } else {
+                                                  Navigator.of(context).pop();
+                                                  showDialog(
+                                                      context: context,
+                                                      child: AlertDialog(
+                                                        title: Text(
+                                                          "Failed",
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontFamily:
+                                                                  "OpenSans",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 16),
+                                                        ),
+                                                        content: Text(
+                                                          "There are some issues with our server, please try again in a few minutes.",
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily:
+                                                                  "OpenSans",
+                                                              fontSize: 14),
+                                                        ),
+                                                        actions: [
+                                                          FlatButton(
+                                                            onPressed: () =>
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(),
+                                                            child: Text(
+                                                              "OK",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ));
+                                                }
+                                              });
+                                            });
+                                          } else {
+                                            Navigator.of(context).pop();
+                                            showDialog(
+                                                context: context,
+                                                child: AlertDialog(
+                                                  title: Text(
+                                                    "Failed",
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontFamily: "OpenSans",
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16),
+                                                  ),
+                                                  content: Text(
+                                                    "There are some issues with our server, please try again in a few minutes.",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: "OpenSans",
+                                                        fontSize: 14),
+                                                  ),
+                                                  actions: [
+                                                    FlatButton(
+                                                      onPressed: () =>
+                                                          Navigator.of(context)
+                                                              .pop(),
+                                                      child: Text(
+                                                        "OK",
+                                                        style: TextStyle(
+                                                          color: Colors.blue,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ));
+                                          }
+                                        });
+                                      },
+                                      title: snapshot.data["data"]["course"]
+                                          [index],
+                                    );
+                                  }),
+                                ),
+                              );
+                            } else {
+                              return RefreshIndicator(
+                                onRefresh: () async {
+                                  setState(() {});
+                                },
+                                child: Stack(
+                                  children: [
+                                    ListView(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            "No courses purchased",
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            "Swipe down to refresh",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          } else {
+                            return RefreshIndicator(
+                              onRefresh: () async {
+                                setState(() {});
+                              },
+                              child: Stack(
+                                children: [
+                                  ListView(),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          "Something went wrong",
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          "Swipe down to refresh",
+                                          style: TextStyle(color: Colors.blue),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  appBarColorlight),
+                            ),
+                          );
+                        }
+                      });
+                } else {
+                  return FutureBuilder(
+                    future: getStoredCoursesList(),
+                    builder: (context, storedSnapshot) {
+                      if (storedSnapshot.hasData) {
+                        var parsedData = jsonDecode(storedSnapshot.data);
+                        return ListView(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          children: List.generate(
+                              parsedData["data"]["batch"].length, (index) {
+                            return CourseCard3(
+                              action: () {
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    child: AlertDialog(
+                                      content: Container(
+                                        height: 80,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Center(
+                                              child: Container(
+                                                height: 30,
+                                                width: 30,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      new AlwaysStoppedAnimation<
+                                                              Color>(
+                                                          appBarColorlight),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ));
-                              resourceAPI(
-                                      snapshot.data["data"]["course"][index],
-                                      snapshot.data["data"]["batch"][index]
-                                          .toString())
-                                  .then((value) {
-                                if (value != "fail") {
-                                  testAPI().then((testValue) {
-                                    if (testValue != "fail") {
-                                      getDownloadLog(
-                                              value[0]["UniqueId"]["en-US"])
-                                          .then((downloadValue) {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          settings: RouteSettings(
-                                            name: "/mentorProfile",
-                                          ),
-                                          builder: (context) =>
-                                              PurchasedCourseDetailsWithDownload(
-                                            courseName: snapshot.data["data"]
-                                                ["course"][index],
-                                            batchNo: snapshot.data["data"]
-                                                ["batch"][index],
-                                            resourceData: value,
-                                            testData: testValue,
-                                            fromDownloads: downloadValue == null
-                                                ? false
-                                                : downloadValue,
-                                          ),
-                                        ));
-                                      });
-                                    } else {
+                                    ));
+                                getStoredResourceList(
+                                        "${parsedData["data"]["course"][index]}_Resources_$index")
+                                    .then((value) {
+                                  if (value != null) {
+                                    var parsedResourceValue = jsonDecode(value);
+                                    setDir().then((mainDirValue) {
                                       Navigator.of(context).pop();
-                                      showDialog(
-                                          context: context,
-                                          child: AlertDialog(
-                                            title: Text(
-                                              "Failed",
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontFamily: "OpenSans",
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16),
-                                            ),
-                                            content: Text(
-                                              "There are some issues with our server, please try again in a few minutes.",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: "OpenSans",
-                                                  fontSize: 14),
-                                            ),
-                                            actions: [
-                                              FlatButton(
-                                                onPressed: () =>
-                                                    Navigator.of(context).pop(),
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        settings: RouteSettings(
+                                          name: "/mentorProfile",
+                                        ),
+                                        builder: (context) =>
+                                            PurchasedCourseDetailsWithDownload(
+                                          mainDir: mainDirValue,
+                                          courseName: parsedData["data"]
+                                              ["course"][index],
+                                          batchNo: parsedData["data"]["batch"]
+                                              [index],
+                                          resourceData: parsedResourceValue,
+                                          testData: null,
+                                          fromDownloads: false,
+                                        ),
+                                      ));
+                                    });
+                                  } else {
+                                    Navigator.pop(context);
+                                    showDialog(
+                                        context: context,
+                                        child: AlertDialog(
+                                          backgroundColor: Colors.red,
+                                          title: Text(
+                                            "Failed",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "OpenSans",
+                                                fontSize: 18),
+                                          ),
+                                          content: Text(
+                                            "No internet connection",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "OpenSans",
+                                                fontSize: 16),
+                                          ),
+                                          actions: [
+                                            FlatButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Center(
                                                 child: Text(
                                                   "OK",
                                                   style: TextStyle(
-                                                    color: Colors.blue,
+                                                    color: Colors.white,
+                                                    fontFamily: "OpenSans",
                                                   ),
                                                 ),
-                                              )
-                                            ],
-                                          ));
-                                    }
-                                  });
-                                } else {
-                                  Navigator.of(context).pop();
-                                  showDialog(
-                                      context: context,
-                                      child: AlertDialog(
-                                        title: Text(
-                                          "Failed",
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontFamily: "OpenSans",
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
-                                        ),
-                                        content: Text(
-                                          "There are some issues with our server, please try again in a few minutes.",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: "OpenSans",
-                                              fontSize: 14),
-                                        ),
-                                        actions: [
-                                          FlatButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
-                                            child: Text(
-                                              "OK",
-                                              style: TextStyle(
-                                                color: Colors.blue,
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      ));
-                                }
-                              });
-                            },
-                            title: snapshot.data["data"]["course"][index],
-                          );
-                        }),
-                      ),
-                    );
-                  } else {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {});
-                      },
-                      child: Stack(
-                        children: [
-                          ListView(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  "No courses purchased",
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Swipe down to refresh",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                } else {
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {});
+                                            )
+                                          ],
+                                        ));
+                                  }
+                                });
+                              },
+                              title: parsedData["data"]["course"][index],
+                            );
+                          }),
+                        );
+                      } else {
+                        return Center(child: Text("You are not connected"));
+                      }
                     },
-                    child: Stack(
-                      children: [
-                        ListView(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                "Something went wrong",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                "Swipe down to refresh",
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
                   );
                 }
               } else {
-                return Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(appBarColorlight),
-                  ),
-                );
+                return Container();
               }
             })
         : _loginScreen(context);

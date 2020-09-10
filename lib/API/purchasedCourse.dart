@@ -15,6 +15,7 @@ Future purchasedCourseListAPI() async {
 
   if (result.statusCode == 200) {
     var parsedResult = jsonDecode(result.body);
+    prefs.setString("purchasedCourseList", result.body);
     return parsedResult;
   } else {
     return "fail";

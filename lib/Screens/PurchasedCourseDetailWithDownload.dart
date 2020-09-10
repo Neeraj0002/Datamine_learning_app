@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chewie/chewie.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:dio/dio.dart';
@@ -19,12 +18,14 @@ class PurchasedCourseDetailsWithDownload extends StatefulWidget {
   var resourceData;
   var testData;
   bool fromDownloads;
+  String mainDir;
   PurchasedCourseDetailsWithDownload(
       {@required this.batchNo,
       @required this.courseName,
       @required this.resourceData,
       @required this.testData,
-      @required this.fromDownloads});
+      @required this.fromDownloads,
+      @required this.mainDir});
   @override
   _PurchasedCourseDetailsWithDownloadState createState() =>
       _PurchasedCourseDetailsWithDownloadState();
@@ -32,6 +33,26 @@ class PurchasedCourseDetailsWithDownload extends StatefulWidget {
 
 class _PurchasedCourseDetailsWithDownloadState
     extends State<PurchasedCourseDetailsWithDownload> {
+  Future checkConnectivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool connection;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connection = true;
+        prefs.setBool("connected", true).then((value) {});
+      }
+    } on SocketException catch (_) {
+      connection = false;
+      prefs.setBool("connected", false).then((value) {
+        setState(() {});
+      });
+      print('not connected');
+    }
+    return connection;
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -64,11 +85,37 @@ class _PurchasedCourseDetailsWithDownloadState
             ),
           ),
           body: TabBarView(children: [
-            Screen1(
-              data: widget.resourceData,
-              fromDownloads: widget.fromDownloads,
-            ),
-            Screen2(currentCourse: widget.courseName, data: widget.testData)
+            FutureBuilder(
+                future: checkConnectivity(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Screen1(
+                      mainDir: widget.mainDir,
+                      connected: snapshot.data,
+                      data: widget.resourceData,
+                      fromDownloads: widget.fromDownloads,
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+            FutureBuilder(
+                future: checkConnectivity(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data) {
+                      return Screen2(
+                          currentCourse: widget.courseName,
+                          data: widget.testData);
+                    } else {
+                      return Center(
+                        child: Text("You are not connected"),
+                      );
+                    }
+                  } else {
+                    return Container();
+                  }
+                }),
           ])),
     );
   }
@@ -78,7 +125,13 @@ class _PurchasedCourseDetailsWithDownloadState
 class Screen1 extends StatefulWidget {
   var data;
   bool fromDownloads;
-  Screen1({@required this.data, @required this.fromDownloads});
+  bool connected;
+  String mainDir;
+  Screen1(
+      {@required this.data,
+      @required this.fromDownloads,
+      @required this.connected,
+      @required this.mainDir});
   @override
   _Screen1State createState() => _Screen1State(data);
 }
@@ -100,12 +153,10 @@ class _Screen1State extends State<Screen1> {
 
   Dio dio = Dio();
 
-  var mainDir;
-
-  setDir() async {
-    mainDir = await getApplicationDocumentsDirectory();
-    print(mainDir);
-  }
+  /*Future getResult() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(widget.storedResultName);
+  }*/
 
   Future<void> downloadVideo(imgUrl, index) async {
     try {
@@ -120,7 +171,7 @@ class _Screen1State extends State<Screen1> {
           downloading[index] = true;
           progress[index] = ((rec / total));
         });
-      });
+      }).then((value) => addDownloadLog(imgUrl).then((value) => print("set")));
     } catch (e) {
       dio.close();
       showDialog(
@@ -133,7 +184,7 @@ class _Screen1State extends State<Screen1> {
                   color: Colors.white, fontFamily: "OpenSans", fontSize: 18),
             ),
             content: Text(
-              e,
+              e.toString(),
               style: TextStyle(
                   color: Colors.white, fontFamily: "OpenSans", fontSize: 16),
             ),
@@ -159,10 +210,9 @@ class _Screen1State extends State<Screen1> {
 
     setState(() {
       downloading[index] = false;
-      progress[index] = 1.0;
+      progress[index] = 0.0;
     });
     print("Download completed");
-    addDownloadLog(imgUrl).then((value) => print("set"));
   }
 
   Future addDownloadLog(uid) async {
@@ -188,51 +238,59 @@ class _Screen1State extends State<Screen1> {
 
   @override
   void initState() {
-    for (int i = 0; i < _data.length; i++) {
-      progress.add(0.0);
-      downloading.add(false);
-    }
-    setDir();
-    currentVideo = _data[nowPlaying]["Link"]["en-US"];
-    if (widget.fromDownloads == true) {
-      videoPlayerController = VideoPlayerController.asset(
-          "${mainDir.path}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4");
-    } else {
-      videoPlayerController = VideoPlayerController.network(currentVideo);
-    }
-    chewieController = ChewieController(
-        videoPlayerController: videoPlayerController,
-        aspectRatio: 16 / 9,
-        autoPlay: true,
-        looping: true,
-        deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
-        fullScreenByDefault: false,
-        materialProgressColors: ChewieProgressColors(
-            playedColor: appBarColorlight,
-            handleColor: appBarColorlight,
-            bufferedColor: appbarTextColorLight),
-        overlay: Container(
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Datamine",
-                    style: TextStyle(
-                        shadows: [
-                          Shadow(color: Colors.black26, offset: Offset(1, 1))
-                        ],
-                        color: Colors.white.withOpacity(0.8),
-                        fontFamily: "Roboto",
-                        fontSize: 12),
+    if (_data != null) {
+      for (int i = 0; i < _data.length; i++) {
+        progress.add(0.0);
+        downloading.add(false);
+      }
+      if (widget.connected) {
+        currentVideo = _data[nowPlaying]["Link"]["en-US"];
+        if (widget.fromDownloads == true) {
+          File _file = File(
+              '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
+          videoPlayerController = VideoPlayerController.file(_file);
+        } else {
+          videoPlayerController = VideoPlayerController.network(currentVideo);
+        }
+      } else {
+        File _file = File(
+            '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
+        videoPlayerController = VideoPlayerController.file(_file);
+      }
+      chewieController = ChewieController(
+          videoPlayerController: videoPlayerController,
+          aspectRatio: 16 / 9,
+          autoPlay: true,
+          looping: true,
+          deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+          fullScreenByDefault: false,
+          materialProgressColors: ChewieProgressColors(
+              playedColor: appBarColorlight,
+              handleColor: appBarColorlight,
+              bufferedColor: appbarTextColorLight),
+          overlay: Container(
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Datamine",
+                      style: TextStyle(
+                          shadows: [
+                            Shadow(color: Colors.black26, offset: Offset(1, 1))
+                          ],
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: "Roboto",
+                          fontSize: 12),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ));
+                )
+              ],
+            ),
+          ));
+    }
     setState(() {});
 
     super.initState();
@@ -250,226 +308,358 @@ class _Screen1State extends State<Screen1> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return ListView(
-      children: [
-        Chewie(
-          controller: chewieController,
-        ),
-        Column(
-          children: [
-            Container(
-              height: 100,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return _data != null
+        ? ListView(
+            children: [
+              Chewie(
+                controller: chewieController,
+              ),
+              Column(
                 children: [
                   Container(
-                    width: screenWidth,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                      child: Text(
-                        _data[0]["Title"]["en-US"],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: screenWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
+                          width: screenWidth,
                           child: Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    MdiIcons.timer,
-                                    color: Colors.grey,
-                                  ),
-                                  Text(
-                                    " ${_data[0]["StartDate"]["en-US"].toString().substring(0, 10)} ${_data[0]["StartDate"]["en-US"].toString().substring(11)}",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontFamily: "Roboto",
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              )),
+                            padding:
+                                const EdgeInsets.only(left: 16.0, right: 8.0),
+                            child: Text(
+                              _data[nowPlaying]["Title"]["en-US"],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "Roboto",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
                         ),
                         Container(
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 16.0, right: 16),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    MdiIcons.timerOff,
-                                    color: Colors.grey,
-                                  ),
-                                  Text(
-                                    " ${_data[0]["EndDate"]["en-US"].toString().substring(0, 10)} ${_data[0]["EndDate"]["en-US"].toString().substring(11)}",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontFamily: "Roboto",
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              )),
+                          width: screenWidth,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          MdiIcons.timer,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          " ${_data[nowPlaying]["StartDate"]["en-US"].toString().substring(0, 10)} ${_data[nowPlaying]["StartDate"]["en-US"].toString().substring(11)}",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: "Roboto",
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              Container(
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, right: 16),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          MdiIcons.timerOff,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          " ${_data[nowPlaying]["EndDate"]["en-US"].toString().substring(0, 10)} ${_data[nowPlaying]["EndDate"]["en-US"].toString().substring(11)}",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: "Roboto",
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
-              child: Container(
-                height: 0.5,
-                color: Colors.grey,
-              ),
-            ),
-            Column(
-              children: [
-                Container(
-                  width: screenWidth,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16.0, right: 8.0, top: 20),
-                    child: Text(
-                      "Videos",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontFamily: "Roboto",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                    child: Container(
+                      height: 0.5,
+                      color: Colors.grey,
                     ),
                   ),
-                ),
-                Column(
-                  children: List.generate(_data.length, (index) {
-                    bool downloaded;
-                    getDownloadLog(_data[index]["Link"]["en-US"]).then((value) {
-                      setState(() {
-                        downloaded = value;
-                        print("VALUE$index = $value");
-                      });
-                    });
-                    return FutureBuilder(
-                        future: getDownloadLog(_data[index]["Link"]["en-US"]),
-                        builder: (context, snapshot) {
-                          return VideoListItem(
-                              downloaded: snapshot.data == null ? false : true,
-                              action: () {
-                                chewieController.pause();
-                                if (nowPlaying != index) {
-                                  setState(() {
-                                    nowPlaying = index;
-                                    currentVideo =
-                                        _data[nowPlaying]["Link"]["en-US"];
-                                    if (snapshot.data == true) {
-                                      File _file = File(
-                                          '${mainDir.path}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
-                                      videoPlayerController =
-                                          VideoPlayerController.file(_file);
-                                    } else {
-                                      videoPlayerController =
-                                          VideoPlayerController.network(
-                                              currentVideo);
-                                    }
-                                    chewieController = ChewieController(
-                                        videoPlayerController:
-                                            videoPlayerController,
-                                        aspectRatio: 16 / 9,
-                                        autoPlay: true,
-                                        looping: true,
-                                        deviceOrientationsAfterFullScreen: [
-                                          DeviceOrientation.portraitUp
-                                        ],
-                                        fullScreenByDefault: false,
-                                        materialProgressColors:
-                                            ChewieProgressColors(
-                                                playedColor: appBarColorlight,
-                                                handleColor: appBarColorlight,
-                                                bufferedColor:
-                                                    appbarTextColorLight),
-                                        overlay: Container(
-                                          child: Stack(
-                                            children: [
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Datamine",
-                                                    style: TextStyle(
-                                                        shadows: [
-                                                          Shadow(
-                                                              color: Colors
-                                                                  .black26,
-                                                              offset:
-                                                                  Offset(1, 1))
-                                                        ],
-                                                        color: Colors.white
-                                                            .withOpacity(0.8),
-                                                        fontFamily: "Roboto",
-                                                        fontSize: 12),
+                  Column(
+                    children: [
+                      Container(
+                        width: screenWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 8.0, top: 20),
+                          child: Text(
+                            "Videos",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: List.generate(_data.length, (index) {
+                          bool downloaded;
+                          getDownloadLog(_data[index]["Link"]["en-US"])
+                              .then((value) {
+                            setState(() {
+                              downloaded = value;
+                              //print("VALUE$index = $value");
+                            });
+                          });
+                          return FutureBuilder(
+                              future:
+                                  getDownloadLog(_data[index]["Link"]["en-US"]),
+                              builder: (context, snapshot) {
+                                if (widget.connected == true) {
+                                  return VideoListItem(
+                                      downloaded:
+                                          snapshot.data == null ? false : true,
+                                      action: () {
+                                        chewieController.pause();
+                                        if (nowPlaying != index) {
+                                          setState(() {
+                                            nowPlaying = index;
+                                            currentVideo = _data[nowPlaying]
+                                                ["Link"]["en-US"];
+                                            if (snapshot.data == true) {
+                                              File _file = File(
+                                                  '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
+                                              videoPlayerController =
+                                                  VideoPlayerController.file(
+                                                      _file);
+                                            } else {
+                                              videoPlayerController =
+                                                  VideoPlayerController.network(
+                                                      currentVideo);
+                                            }
+                                            chewieController = ChewieController(
+                                                videoPlayerController:
+                                                    videoPlayerController,
+                                                aspectRatio: 16 / 9,
+                                                autoPlay: true,
+                                                looping: true,
+                                                deviceOrientationsAfterFullScreen: [
+                                                  DeviceOrientation.portraitUp
+                                                ],
+                                                fullScreenByDefault: false,
+                                                materialProgressColors:
+                                                    ChewieProgressColors(
+                                                        playedColor:
+                                                            appBarColorlight,
+                                                        handleColor:
+                                                            appBarColorlight,
+                                                        bufferedColor:
+                                                            appbarTextColorLight),
+                                                overlay: Container(
+                                                  child: Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            "Datamine",
+                                                            style: TextStyle(
+                                                                shadows: [
+                                                                  Shadow(
+                                                                      color: Colors
+                                                                          .black26,
+                                                                      offset:
+                                                                          Offset(
+                                                                              1,
+                                                                              1))
+                                                                ],
+                                                                color: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.8),
+                                                                fontFamily:
+                                                                    "Roboto",
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ));
-                                  });
-                                }
-                              },
-                              downloadAction: () async {
-                                await _handleStoragePermission(
-                                    Permission.storage);
-                                if (downloading[index] == false) {
-                                  print("DOWNLOADING");
-                                  print(_data[index]["Link"]["en-US"]);
-                                  downloadVideo(
-                                      _data[index]["Link"]["en-US"], index);
+                                                ));
+                                          });
+                                        }
+                                      },
+                                      downloadAction: () async {
+                                        await _handleStoragePermission(
+                                            Permission.storage);
+                                        if (downloading[index] == false) {
+                                          print("DOWNLOADING");
+                                          print(_data[index]["Link"]["en-US"]);
+                                          downloadVideo(
+                                              _data[index]["Link"]["en-US"],
+                                              index);
+                                        }
+                                        setState(() {
+                                          downloading[index] =
+                                              !downloading[index];
+                                        });
+                                      },
+                                      percent: progress[index],
+                                      download: downloading[index],
+                                      active:
+                                          index == nowPlaying ? true : false,
+                                      icon: MdiIcons.play,
+                                      title: _data[index]["Title"]["en-US"]);
                                 } else {
-                                  print("STOPPED");
-                                  dio.close();
+                                  if (snapshot.data != null) {
+                                    if (snapshot.data) {
+                                      return VideoListItem(
+                                          downloaded: snapshot.data == null
+                                              ? false
+                                              : true,
+                                          action: () {
+                                            chewieController.pause();
+                                            if (nowPlaying != index) {
+                                              setState(() {
+                                                nowPlaying = index;
+                                                currentVideo = _data[nowPlaying]
+                                                    ["Link"]["en-US"];
+                                                if (snapshot.data == true) {
+                                                  File _file = File(
+                                                      '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
+                                                  videoPlayerController =
+                                                      VideoPlayerController
+                                                          .file(_file);
+                                                } else {
+                                                  videoPlayerController =
+                                                      VideoPlayerController
+                                                          .network(
+                                                              currentVideo);
+                                                }
+                                                chewieController =
+                                                    ChewieController(
+                                                        videoPlayerController:
+                                                            videoPlayerController,
+                                                        aspectRatio: 16 / 9,
+                                                        autoPlay: true,
+                                                        looping: true,
+                                                        deviceOrientationsAfterFullScreen: [
+                                                          DeviceOrientation
+                                                              .portraitUp
+                                                        ],
+                                                        fullScreenByDefault:
+                                                            false,
+                                                        materialProgressColors:
+                                                            ChewieProgressColors(
+                                                                playedColor:
+                                                                    appBarColorlight,
+                                                                handleColor:
+                                                                    appBarColorlight,
+                                                                bufferedColor:
+                                                                    appbarTextColorLight),
+                                                        overlay: Container(
+                                                          child: Stack(
+                                                            children: [
+                                                              Align(
+                                                                alignment: Alignment
+                                                                    .bottomRight,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Text(
+                                                                    "Datamine",
+                                                                    style: TextStyle(
+                                                                        shadows: [
+                                                                          Shadow(
+                                                                              color: Colors.black26,
+                                                                              offset: Offset(1, 1))
+                                                                        ],
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(
+                                                                                0.8),
+                                                                        fontFamily:
+                                                                            "Roboto",
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ));
+                                              });
+                                            }
+                                          },
+                                          downloadAction: () async {
+                                            await _handleStoragePermission(
+                                                Permission.storage);
+                                            if (downloading[index] == false) {
+                                              print("DOWNLOADING");
+                                              print(_data[index]["Link"]
+                                                  ["en-US"]);
+                                              downloadVideo(
+                                                  _data[index]["Link"]["en-US"],
+                                                  index);
+                                            }
+                                            setState(() {
+                                              downloading[index] =
+                                                  !downloading[index];
+                                            });
+                                          },
+                                          percent: progress[index],
+                                          download: downloading[index],
+                                          active: index == nowPlaying
+                                              ? true
+                                              : false,
+                                          icon: MdiIcons.play,
+                                          title: _data[index]["Title"]
+                                              ["en-US"]);
+                                    } else {
+                                      return Container();
+                                    }
+                                  } else {
+                                    return Container();
+                                  }
                                 }
-                                setState(() {
-                                  downloading[index] = !downloading[index];
-                                });
-                              },
-                              percent: progress[index],
-                              download: downloading[index],
-                              active: index == nowPlaying ? true : false,
-                              icon: MdiIcons.play,
-                              title: _data[index]["Title"]["en-US"]);
-                        });
-                  }),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 100,
-            )
-          ],
-        ),
-      ],
-    );
+                              });
+                        }),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 100,
+                  )
+                ],
+              ),
+            ],
+          )
+        : Center(
+            child: Text("You are not connected"),
+          );
   }
 }
 
@@ -535,13 +725,15 @@ class VideoListItem extends StatelessWidget {
                     ),
                     downloaded
                         ? Container()
-                        : IconButton(
-                            icon: Icon(
-                              download ? Icons.close : Icons.file_download,
-                            ),
-                            color: active ? Colors.white : Colors.black54,
-                            onPressed: downloadAction,
-                          ),
+                        : !download
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.file_download,
+                                ),
+                                color: active ? Colors.white : Colors.black54,
+                                onPressed: downloadAction,
+                              )
+                            : Container()
                   ],
                 );
               }),
