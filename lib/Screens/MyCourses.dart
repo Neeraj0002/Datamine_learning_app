@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
+import 'package:datamine/Screens/PurchasedCourseDetailWithDownload.dart';
+import 'package:datamine/Screens/PurchasedCourseDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:datamine/API/purchasedCourse.dart';
 import 'package:datamine/API/resourcesRequest.dart';
@@ -9,7 +11,6 @@ import 'package:datamine/API/testRequest.dart';
 import 'package:datamine/Components/CourseCard.dart';
 import 'package:datamine/Screens/Appdrawer.dart';
 import 'package:datamine/Screens/CourseDetails.dart';
-import 'package:datamine/Screens/PurchasedCourseDetail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
@@ -254,6 +255,12 @@ class _MyCoursesState extends State<MyCourses> {
     );
   }
 
+  Future getDownloadLog(urlValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool checkDownload = prefs.getBool(urlValue);
+    return checkDownload;
+  }
+
   @override
   void initState() {
     getUserData();
@@ -315,22 +322,29 @@ class _MyCoursesState extends State<MyCourses> {
                                 if (value != "fail") {
                                   testAPI().then((testValue) {
                                     if (testValue != "fail") {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        settings: RouteSettings(
-                                          name: "/mentorProfile",
-                                        ),
-                                        builder: (context) =>
-                                            PurchasedCourseDetails(
-                                          courseName: snapshot.data["data"]
-                                              ["course"][index],
-                                          batchNo: snapshot.data["data"]
-                                              ["batch"][index],
-                                          resourceData: value,
-                                          testData: testValue,
-                                        ),
-                                      ));
+                                      getDownloadLog(
+                                              value[0]["UniqueId"]["en-US"])
+                                          .then((downloadValue) {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          settings: RouteSettings(
+                                            name: "/mentorProfile",
+                                          ),
+                                          builder: (context) =>
+                                              PurchasedCourseDetailsWithDownload(
+                                            courseName: snapshot.data["data"]
+                                                ["course"][index],
+                                            batchNo: snapshot.data["data"]
+                                                ["batch"][index],
+                                            resourceData: value,
+                                            testData: testValue,
+                                            fromDownloads: downloadValue == null
+                                                ? false
+                                                : downloadValue,
+                                          ),
+                                        ));
+                                      });
                                     } else {
                                       Navigator.of(context).pop();
                                       showDialog(

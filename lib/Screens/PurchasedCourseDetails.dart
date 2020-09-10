@@ -111,10 +111,12 @@ class _Screen1State extends State<Screen1> {
 
   ChewieController chewieController;
 
+  String currentVideo;
+
   @override
   void initState() {
-    videoPlayerController =
-        VideoPlayerController.network(_data[nowPlaying]["Link"]["en-US"]);
+    currentVideo = _data[nowPlaying]["Link"]["en-US"];
+    videoPlayerController = VideoPlayerController.network(currentVideo);
     chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         aspectRatio: 16 / 9,
@@ -276,6 +278,47 @@ class _Screen1State extends State<Screen1> {
                           if (nowPlaying != index) {
                             setState(() {
                               nowPlaying = index;
+                              currentVideo = _data[nowPlaying]["Link"]["en-US"];
+                              videoPlayerController =
+                                  VideoPlayerController.network(currentVideo);
+                              chewieController = ChewieController(
+                                  videoPlayerController: videoPlayerController,
+                                  aspectRatio: 16 / 9,
+                                  autoPlay: true,
+                                  looping: true,
+                                  deviceOrientationsAfterFullScreen: [
+                                    DeviceOrientation.portraitUp
+                                  ],
+                                  fullScreenByDefault: false,
+                                  materialProgressColors: ChewieProgressColors(
+                                      playedColor: appBarColorlight,
+                                      handleColor: appBarColorlight,
+                                      bufferedColor: appbarTextColorLight),
+                                  overlay: Container(
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "Datamine",
+                                              style: TextStyle(
+                                                  shadows: [
+                                                    Shadow(
+                                                        color: Colors.black26,
+                                                        offset: Offset(1, 1))
+                                                  ],
+                                                  color: Colors.white
+                                                      .withOpacity(0.8),
+                                                  fontFamily: "Roboto",
+                                                  fontSize: 12),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ));
                             });
                           }
                         },

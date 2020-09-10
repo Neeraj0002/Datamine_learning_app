@@ -41,6 +41,8 @@ dependencies:
   launch_review: ^2.0.0
   dio: ^3.0.10
   path_provider: ^1.6.14
+  percent_indicator: ^2.1.6
+  permission_handler: ^5.0.1 
 
 
   # The following adds the Cupertino Icons font to your application.
