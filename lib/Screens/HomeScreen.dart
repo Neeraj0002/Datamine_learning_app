@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:datamine/API/generalRequest.dart';
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/CourseList.dart';
 import 'package:datamine/Screens/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -186,6 +188,111 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (snapshot.data != 'fail') {
                           return ListView(
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 55,
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                      ["Categories"]
+                                                  ["Web Development"],
+                                              categoryName: "Web Development",
+                                            ),
+                                          ));
+                                        },
+                                        title: "Web Development",
+                                      ),
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                      ["Categories"]
+                                                  ["App Development"],
+                                              categoryName: "App Development",
+                                            ),
+                                          ));
+                                        },
+                                        title: "App Development",
+                                      ),
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                  ["Categories"]["Blockchain"],
+                                              categoryName: "Blockchain",
+                                            ),
+                                          ));
+                                        },
+                                        title: "Blockchain",
+                                      ),
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                  ["Categories"]["ML & AI"],
+                                              categoryName: "ML & AI",
+                                            ),
+                                          ));
+                                        },
+                                        title: "ML & AI",
+                                      ),
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                      ["Categories"]
+                                                  ["Data Science"],
+                                              categoryName: "Data Science",
+                                            ),
+                                          ));
+                                        },
+                                        title: "Data Science",
+                                      ),
+                                      CategoryCard(
+                                        action: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: "/courseList"),
+                                            builder: (context) => CourseList(
+                                              data: snapshot.data["data"]
+                                                  ["Categories"]["Others"],
+                                              categoryName: "Others",
+                                            ),
+                                          ));
+                                        },
+                                        title: "Others",
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                               FutureBuilder(
                                 future: sliderListAPI(),
                                 builder: (context, imageSnapshot) {
@@ -202,30 +309,37 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Column(children: [
                                 HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["Web Development"],
-                                    title: "Web Development"),
-                                HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["App Development"],
-                                    title: "App Development"),
-                                HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["Blockchain"],
-                                    title: "Blockchain"),
-                                HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["ML & AI"],
-                                    title: "ML & AI"),
-                                HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["Data Science"],
-                                    title: "Data Science"),
-                                HorizontalDataList(
-                                    dataList: snapshot.data["data"]
-                                        ["Categories"]["Others"],
-                                    title: "Others")
+                                    dataList: snapshot.data["data"]["Trending"]
+                                        ["courses"],
+                                    title: "Trending")
                               ]),
+                              FutureBuilder(
+                                  future: generalAPI(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      return GeneralItem(
+                                          courses: snapshot.data["data"]
+                                                  ["Courses"]["en-US"]
+                                              .toString(),
+                                          rating: snapshot.data["data"]
+                                                  ["Rating"]["en-US"]
+                                              .toString(),
+                                          reviews: snapshot.data["data"]
+                                                  ["Reviews"]["en-US"]
+                                              .toString(),
+                                          users: snapshot.data["data"]["Users"]
+                                                  ["en-US"]
+                                              .toString());
+                                    } else {
+                                      return GeneralItem(
+                                          courses: "--",
+                                          rating: "--",
+                                          reviews: "--",
+                                          users: "--");
+                                    }
+                                  }),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
@@ -342,6 +456,183 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
           }),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class CategoryCard extends StatelessWidget {
+  Function action;
+  final String title;
+  CategoryCard({this.action, this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: InkWell(
+        onTap: action,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(60),
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  color: Colors.black12,
+                )
+              ]),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "OpenSans",
+                    fontSize: 14),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class GeneralItem extends StatelessWidget {
+  String rating;
+  String courses;
+  String reviews;
+  String users;
+  GeneralItem(
+      {@required this.courses,
+      @required this.rating,
+      @required this.reviews,
+      @required this.users});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * (0.75),
+                  child: Text(
+                    rating,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "OpenSans",
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.rate_review,
+                  color: Colors.amber,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * (0.75),
+                  child: Text(
+                    reviews,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "OpenSans",
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.people,
+                  color: Colors.amber,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * (0.75),
+                  child: Text(
+                    users,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "OpenSans",
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.video_library,
+                  color: Colors.amber,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * (0.75),
+                  child: Text(
+                    courses,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "OpenSans",
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

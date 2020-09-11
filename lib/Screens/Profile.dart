@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:flutter/material.dart';
@@ -176,52 +177,140 @@ class _ProfileState extends State<Profile> {
           future: getUserData(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView(
-                children: [
-                  /*Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        shape: BoxShape.circle,
-                      ),
-                      child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "https://eruditegroup.co.nz/wp-content/uploads/2016/07/profile-dummy3.png",
-                          errorWidget: (context, url, error) {
-                            return Center(
-                              child: Icon(
-                                Icons.error,
-                                color: Colors.red,
-                              ),
-                            );
-                          },
-                          progressIndicatorBuilder: (context, url, progress) {
-                            return Center(
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          },
-                          fit: BoxFit.fill,
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Container(
+                          height: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://eruditegroup.co.nz/wp-content/uploads/2016/07/profile-dummy3.png",
+                              errorWidget: (context, url, error) {
+                                return Center(
+                                  child: Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              },
+                              progressIndicatorBuilder:
+                                  (context, url, progress) {
+                                return Center(
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),*/
-                  ProfileItem(
-                      data:
-                          "${snapshot.data["fName"]} ${snapshot.data["lName"]}",
-                      type: "NAME"),
-                  ProfileItem(data: "${snapshot.data["mail"]}", type: "EMAIL"),
-                  ProfileItem(data: "${snapshot.data["phone"]}", type: "PHONE"),
-                  ProfileItem(
-                      data:
-                          "${snapshot.data["address"]["line1"]}\n${snapshot.data["address"]["line2"]}\n${snapshot.data["address"]["line3"]}",
-                      type: "ADDRESS"),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20.0, 10, 8, 10),
+                      child: Text(
+                        "Hello,",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "OpenSans",
+                            fontSize: 20),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 8, 10),
+                      child: Text(
+                        "${snapshot.data["fName"]} ${snapshot.data["lName"]}",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "OpenSans",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35),
+                      ),
+                    ),
+
+                    //width: MediaQuery.of(context).size.width,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 8, 10),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            color: appBarColorlight,
+                            size: 25,
+                          ),
+                          Text(
+                            "  ${snapshot.data["phone"]}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "OpenSans",
+                                fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 8, 10),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.mail,
+                            color: appBarColorlight,
+                            size: 25,
+                          ),
+                          Text(
+                            "  ${snapshot.data["mail"]}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "OpenSans",
+                                fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 8, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Icon(
+                              Icons.home,
+                              color: appBarColorlight,
+                              size: 25,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            "${snapshot.data["address"]["line1"]}\n${snapshot.data["address"]["line2"]}\n${snapshot.data["address"]["line3"]}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "OpenSans",
+                                fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
             } else {
               return Container(
@@ -257,6 +346,7 @@ class _ProfileState extends State<Profile> {
           FlatButton(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => LoginScreen(
+                      fromSplashScreen: false,
                       fromMyCourse: false,
                       fromProfile: true,
                       fromSignUp: false,

@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:datamine/Components/colors.dart';
-import 'package:datamine/constants.dart';
+import 'package:datamine/Screens/Login.dart';
+import 'package:datamine/Screens/onBoarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/API/courseListRequst.dart';
-import 'package:datamine/API/sliderImages.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
-import 'package:datamine/Screens/HomeScreen.dart';
-import 'package:datamine/Screens/Login.dart';
 import 'package:datamine/Screens/appCrashed.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +17,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Future getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data = prefs.getString("userData");
+    if (data != null) {
+      var parsedData = jsonDecode(data);
+      return parsedData;
+    } else {
+      return "notLoggedIn";
+    }
+  }
+
+  Future checkFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("firstTime");
+  }
+
   chechId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString("userData");
@@ -31,14 +44,40 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.setBool("connected", true).then((value) {
           courseListAPI().then((value) {
             if (value != "fail") {
-              prefs.setString("courseListData", jsonEncode(value)).then(
-                  (value) =>
+              prefs
+                  .setString("courseListData", jsonEncode(value))
+                  .then((value) {
+                checkFirstTime().then((firstTime) {
+                  if (firstTime != null) {
+                    getUserData().then((value) {
+                      if (value != "notLoggedIn") {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          settings: RouteSettings(name: "/homeScreen"),
+                          builder: (context) => BottomNaviBar(
+                            indexNo: 0,
+                          ),
+                        ));
+                      } else {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            settings: RouteSettings(name: "/loginScreen"),
+                            builder: (context) => LoginScreen(
+                                  fromProfile: false,
+                                  fromSignUp: false,
+                                  parent: null,
+                                  fromMyCourse: false,
+                                  fromSplashScreen: true,
+                                )));
+                      }
+                    });
+                  } else {
+                    prefs.setBool("firstTime", false).then((value) {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        settings: RouteSettings(name: "/homeScreen"),
-                        builder: (context) => BottomNaviBar(
-                          indexNo: 0,
-                        ),
-                      )));
+                          settings: RouteSettings(name: "/homeScreen"),
+                          builder: (context) => OnBoardingPage()));
+                    });
+                  }
+                });
+              });
             } else {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 settings: RouteSettings(name: "/homeScreen"),

@@ -273,6 +273,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             LoginScreen(
+                                                              fromSplashScreen:
+                                                                  false,
                                                               fromMyCourse:
                                                                   false,
                                                               fromProfile:
@@ -495,6 +497,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     } else {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => LoginScreen(
+                                fromSplashScreen: false,
                                 fromMyCourse: false,
                                 fromProfile: false,
                                 fromSignUp: true,

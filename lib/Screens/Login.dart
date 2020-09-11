@@ -18,12 +18,14 @@ class LoginScreen extends StatefulWidget {
   bool fromProfile;
   bool fromSignUp;
   bool fromMyCourse;
+  bool fromSplashScreen;
   var parent;
   LoginScreen(
       {@required this.fromProfile,
       @required this.fromSignUp,
       @required this.parent,
-      @required this.fromMyCourse});
+      @required this.fromMyCourse,
+      @required this.fromSplashScreen});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -76,6 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark));
     super.initState();
   }
 
@@ -89,13 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
         key: loginKey,
         backgroundColor: Colors.white,
         appBar: AppBar(
+          brightness: Brightness.dark,
           backgroundColor: Colors.white,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Colors.black87,
-            onPressed: () => Navigator.of(context).pop(),
-          ),
         ),
         body: Stack(
           children: [
@@ -228,6 +229,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                               builder: (context) =>
                                                   BottomNaviBar(
                                                 indexNo: 1,
+                                              ),
+                                            ));
+                                          } else if (widget.fromSplashScreen) {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                              settings: RouteSettings(
+                                                  name: "/indexPage"),
+                                              builder: (context) =>
+                                                  BottomNaviBar(
+                                                indexNo: 0,
                                               ),
                                             ));
                                           }
@@ -370,7 +382,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                         settings: RouteSettings(name: "/signup")));
                   },
-                )
+                ),
+                widget.fromSplashScreen
+                    ? customTextButton(
+                        textColor: appBarColorlight.withOpacity(0.8),
+                        text: "Skip Login",
+                        action: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => BottomNaviBar(indexNo: 0),
+                              settings: RouteSettings(name: "/homeScreen")));
+                        },
+                      )
+                    : Container()
               ],
             ),
             isLoading
