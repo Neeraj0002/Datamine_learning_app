@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datamine/API/generalRequest.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/CourseList.dart';
@@ -20,6 +21,7 @@ import 'package:datamine/Screens/CourseDetails.dart';
 import 'package:datamine/Screens/chatrooms.dart';
 import 'package:datamine/constants.dart';
 import 'package:datamine/services/database.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -299,11 +301,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (imageSnapshot.connectionState ==
                                           ConnectionState.done &&
                                       imageSnapshot.hasData) {
-                                    return ImageSlider(
+                                    return Container(
+                                      height: 200,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Swiper(
+                                        itemCount: imageSnapshot
+                                            .data["data"]["images"].length,
+                                        autoplay: true,
+                                        itemBuilder: (context, index) {
+                                          return CachedNetworkImage(
+                                            imageUrl: imageSnapshot.data["data"]
+                                                ["images"][index],
+                                            errorWidget: (context, url, error) {
+                                              return Center(
+                                                child: Icon(
+                                                  Icons.error,
+                                                  color: Colors.red,
+                                                ),
+                                              );
+                                            },
+                                            progressIndicatorBuilder:
+                                                (context, url, progress) {
+                                              return Center(
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        new AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            appBarColorlight),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                    /*return ImageSlider(
                                         imgUrls: imageSnapshot.data["data"]
-                                            ["images"]);
+                                            ["images"]);*/
                                   } else {
-                                    return ImageSliderPlaceHolder();
+                                    return Container(
+                                      height: 200,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  appBarColorlight),
+                                        ),
+                                      ),
+                                    );
                                   }
                                 },
                               ),
@@ -313,6 +363,99 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ["courses"],
                                     title: "Trending")
                               ]),
+                              /*Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0, left: 8.0, bottom: 8),
+                                    child: Text(
+                                      "Trending",
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Container(
+                                height: 200,
+                                width: MediaQuery.of(context).size.width,
+                                child: Swiper(
+                                  itemCount: snapshot
+                                      .data["data"]["Trending"]["courses"]
+                                      .length,
+                                  autoplay: true,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          settings: RouteSettings(
+                                            name: "/mentorProfile",
+                                          ),
+                                          builder: (context) => CourseDetails(
+                                            outcome: snapshot.data["data"]
+                                                    ["Trending"]["courses"]
+                                                [index]["Outcome"]["en-US"],
+                                            demoVideo: snapshot.data["data"]
+                                                                ["Trending"]
+                                                            ["courses"][index]
+                                                        ["Demo"] !=
+                                                    null
+                                                ? snapshot.data["data"]
+                                                        ["Trending"]["courses"]
+                                                    [index]["Demo"]["en-US"]
+                                                : null,
+                                            courseName: snapshot.data["data"]
+                                                    ["Trending"]["courses"]
+                                                [index]["Title"]["en-US"],
+                                            price: int.parse(
+                                                snapshot.data["data"]
+                                                        ["Trending"]["courses"]
+                                                    [index]["Price"]["en-US"]),
+                                            imgUrl: snapshot.data["data"]
+                                                    ["Trending"]["courses"]
+                                                [index]["Thumbnail"]["en-US"],
+                                            desc: snapshot.data["data"]
+                                                    ["Trending"]["courses"]
+                                                [index]["Details"]["en-US"],
+                                          ),
+                                        ));
+                                      },
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data["data"]
+                                                ["Trending"]["courses"][index]
+                                            ["Thumbnail"]["en-US"],
+                                        errorWidget: (context, url, error) {
+                                          return Center(
+                                            child: Icon(
+                                              Icons.error,
+                                              color: Colors.red,
+                                            ),
+                                          );
+                                        },
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) {
+                                          return Center(
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    new AlwaysStoppedAnimation<
+                                                            Color>(
+                                                        appBarColorlight),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),*/
                               FutureBuilder(
                                   future: generalAPI(),
                                   builder: (context, snapshot) {

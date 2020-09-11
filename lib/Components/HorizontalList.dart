@@ -31,7 +31,7 @@ class HorizontalDataList extends StatelessWidget {
               Container(
                 height: 220,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                   child: ListView(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),

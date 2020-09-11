@@ -26,7 +26,7 @@ class CourseCard extends StatelessWidget {
               boxShadow: [
                 BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 2)
               ],
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(5),
             ),
             child: Column(
               children: [
@@ -35,13 +35,13 @@ class CourseCard extends StatelessWidget {
                   width: constraints.maxWidth,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5)),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5)),
                     child: CachedNetworkImage(
                       imageUrl: imgUrl,
                       errorWidget: (context, url, error) {
@@ -70,8 +70,8 @@ class CourseCard extends StatelessWidget {
                   height: constraints.maxHeight * (0.4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
+                        bottomLeft: Radius.circular(5),
+                        bottomRight: Radius.circular(5)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

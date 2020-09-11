@@ -321,7 +321,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
     final skipBtn = IntroButton(
       child: widget.skip,
-      onPressed: isSkipBtn ? _onSkip : null,
+      onPressed: _onSkip,
     );
 
     final nextBtn = IntroButton(

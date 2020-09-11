@@ -193,28 +193,10 @@ class _ProfileState extends State<Profile> {
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "https://eruditegroup.co.nz/wp-content/uploads/2016/07/profile-dummy3.png",
-                              errorWidget: (context, url, error) {
-                                return Center(
-                                  child: Icon(
-                                    Icons.error,
-                                    color: Colors.red,
-                                  ),
-                                );
-                              },
-                              progressIndicatorBuilder:
-                                  (context, url, progress) {
-                                return Center(
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              },
-                              fit: BoxFit.fill,
-                            ),
-                          ),
+                              child: Image.asset(
+                            "assets/img/Logo.jpg",
+                            fit: BoxFit.contain,
+                          )),
                         ),
                       ),
                     ),
