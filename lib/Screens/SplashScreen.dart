@@ -144,6 +144,37 @@ class _SplashScreenState extends State<SplashScreen> {
               width: screenWidth,
             ),
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              //color: Colors.red,
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Powered by",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black45,
+                      fontFamily: "OpenSans",
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    "Torc Infotech",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontFamily: "OpenSans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
