@@ -32,7 +32,7 @@ class _CourseListState extends State<CourseList> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: appBarColorlight,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       backgroundColor: Colors.white,
       body: ListView(

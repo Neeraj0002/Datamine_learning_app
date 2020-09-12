@@ -69,7 +69,7 @@ class _ChatState extends State<Chat> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: appBarColorlight,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Chat"),
       ),
       body: Container(

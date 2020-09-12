@@ -430,7 +430,7 @@ class _CourseDetailsState extends State<CourseDetails> {
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: appBarColorlight,
         title: Text(
           "${widget.courseName}",

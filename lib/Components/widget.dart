@@ -7,7 +7,7 @@ Widget appBarMain(BuildContext context) {
       height: 40,
     ),
     elevation: 0.0,
-    centerTitle: false,
+    centerTitle: true,
   );
 }
 

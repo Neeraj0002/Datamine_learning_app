@@ -11,7 +11,7 @@ class ContactUs extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: appBarColorlight,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           "Contact Us",
         ),

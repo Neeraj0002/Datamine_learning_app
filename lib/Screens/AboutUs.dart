@@ -14,7 +14,7 @@ class _AboutUsState extends State<AboutUs> {
       appBar: AppBar(
         title: Text("About Us"),
         backgroundColor: appBarColorlight,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,

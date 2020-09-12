@@ -284,7 +284,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
           appBar: AppBar(
             backgroundColor: appBarColorlight,
             centerTitle: true,
-            iconTheme: IconThemeData(color: appbarTextColorLight),
+            iconTheme: IconThemeData(color: Colors.white),
             title: Text(
               "Enroll",
               style: TextStyle(color: Colors.white),

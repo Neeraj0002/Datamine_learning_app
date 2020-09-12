@@ -99,3 +99,6 @@ flutter:
           weight: 500
         - asset: assets/fonts/OpenSans-Bold.ttf
           weight: 900
+    - family: ProximaNova
+      fonts:
+        - asset: assets/fonts/ProximaNova-Regular.otf

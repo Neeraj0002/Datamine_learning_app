@@ -5,6 +5,9 @@ import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:datamine/Screens/PurchasedCourseDetailWithDownload.dart';
 import 'package:datamine/Screens/PurchasedCourseDetails.dart';
+import 'package:datamine/Screens/chatrooms.dart';
+import 'package:datamine/constants.dart';
+import 'package:datamine/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:datamine/API/purchasedCourse.dart';
 import 'package:datamine/API/resourcesRequest.dart';
@@ -14,6 +17,8 @@ import 'package:datamine/Screens/Appdrawer.dart';
 import 'package:datamine/Screens/CourseDetails.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'ChatScreen2.dart';
 
 GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
 
@@ -26,6 +31,8 @@ class MainCourses extends StatefulWidget {
 
 class _MainCoursesState extends State<MainCourses> {
   bool _connected = false;
+  bool userLoggedIn = false;
+
   Future checkConnectivity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool connection;
@@ -46,8 +53,48 @@ class _MainCoursesState extends State<MainCourses> {
     return connection;
   }
 
+  sendMessage() {
+    DatabaseMethods databaseMethods = DatabaseMethods();
+    List<String> users = [Constants.myName, "Admin"];
+
+    String chatRoomId = "${Constants.id}_Admin";
+
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId": chatRoomId,
+    };
+
+    databaseMethods.addChatRoom(chatRoom, chatRoomId);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Chat(
+                  chatRoomId: chatRoomId,
+                  name: "Chat",
+                )));
+  }
+
+  checkUserLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data = prefs.getString("userData");
+
+    setState(() {
+      if (data != null) {
+        userLoggedIn = true;
+        var parsedData = jsonDecode(data);
+        Constants.id = parsedData['id'];
+        Constants.myName = "${parsedData["fName"]} ${parsedData["lName"]}";
+        Constants.email = parsedData["mail"];
+      } else {
+        userLoggedIn = false;
+      }
+    });
+  }
+
   @override
   void initState() {
+    checkUserLoggedIn();
     checkConnectivity().then((value) {
       setState(() {
         _connected = value;
@@ -71,12 +118,30 @@ class _MainCoursesState extends State<MainCourses> {
             leading: _connected
                 ? IconButton(
                     icon: Icon(Icons.menu),
-                    color: appbarTextColorLight,
+                    color: Colors.white,
                     onPressed: () {
                       myCourses.currentState.openDrawer();
                     },
                   )
                 : Container(),
+            actions: [
+              userLoggedIn
+                  ? _connected
+                      ? IconButton(
+                          color: Colors.white,
+                          icon: Icon(Icons.chat),
+                          onPressed: () {
+                            if (Constants.email == "admin.torc@gmail.com") {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChatRoom()));
+                            } else {
+                              sendMessage();
+                            }
+                          },
+                        )
+                      : Container()
+                  : Container(),
+            ],
             title: Text(
               "Courses",
               style: TextStyle(color: Colors.white),
@@ -84,6 +149,7 @@ class _MainCoursesState extends State<MainCourses> {
             bottom: TabBar(
               indicatorColor: appbarTextColorLight,
               labelColor: appbarTextColorLight,
+              unselectedLabelColor: Colors.white,
               tabs: [
                 Tab(
                   text: "All Course",
@@ -100,7 +166,9 @@ class _MainCoursesState extends State<MainCourses> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data) {
-                      return AllCourses();
+                      return AllCourses(
+                        parent: this,
+                      );
                     } else {
                       return Center(
                         child: Text("You are not connected"),
@@ -633,6 +701,8 @@ class _MyCoursesState extends State<MyCourses> {
 }
 
 class AllCourses extends StatefulWidget {
+  _MainCoursesState parent;
+  AllCourses({@required this.parent});
   @override
   _AllCoursesState createState() => _AllCoursesState();
 }

@@ -66,7 +66,7 @@ class _PurchasedCourseDetailsWithDownloadState
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: appBarColorlight,
-            iconTheme: IconThemeData(color: appbarTextColorLight),
+            iconTheme: IconThemeData(color: Colors.white),
             title: Text(
               widget.courseName,
               style: TextStyle(color: Colors.white),

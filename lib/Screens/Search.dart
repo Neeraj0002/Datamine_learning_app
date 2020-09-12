@@ -62,9 +62,9 @@ class _SearchState extends State<Search> {
         appBar: AppBar(
           brightness: Brightness.dark,
           excludeHeaderSemantics: true,
-          iconTheme: IconThemeData(color: appbarTextColorLight),
+          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: appBarColorlight,
-          centerTitle: false,
+          centerTitle: true,
           title: TextField(
             focusNode: searchNode,
             style: TextStyle(color: Colors.white),

@@ -25,6 +25,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
           builder: (_) => LoginScreen(
+              fromAppDrawer: false,
               fromProfile: false,
               fromSignUp: false,
               parent: null,

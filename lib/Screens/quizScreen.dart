@@ -122,7 +122,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
             centerTitle: true,
             backgroundColor: appBarColorlight,
-            iconTheme: IconThemeData(color: appbarTextColorLight),
+            iconTheme: IconThemeData(color: Colors.white),
           ),
           body: ListView(children: <Widget>[
             Padding(

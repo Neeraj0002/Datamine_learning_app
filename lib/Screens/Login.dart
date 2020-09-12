@@ -12,20 +12,20 @@ import 'package:datamine/services/auth.dart';
 import 'package:datamine/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-GlobalKey<ScaffoldState> loginKey = GlobalKey<ScaffoldState>();
-
 class LoginScreen extends StatefulWidget {
   bool fromProfile;
   bool fromSignUp;
   bool fromMyCourse;
   bool fromSplashScreen;
+  bool fromAppDrawer;
   var parent;
   LoginScreen(
       {@required this.fromProfile,
       @required this.fromSignUp,
       @required this.parent,
       @required this.fromMyCourse,
-      @required this.fromSplashScreen});
+      @required this.fromSplashScreen,
+      @required this.fromAppDrawer});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -91,12 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
-        key: loginKey,
         backgroundColor: Colors.white,
         appBar: AppBar(
           brightness: Brightness.dark,
           backgroundColor: Colors.white,
           elevation: 0,
+          iconTheme: IconThemeData(
+              color: widget.fromSplashScreen ? Colors.white : Colors.black87),
         ),
         body: Stack(
           children: [
@@ -231,7 +232,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 indexNo: 1,
                                               ),
                                             ));
-                                          } else if (widget.fromSplashScreen) {
+                                          } else if (widget.fromSplashScreen ||
+                                              widget.fromAppDrawer) {
                                             Navigator.of(context)
                                                 .pushReplacement(
                                                     MaterialPageRoute(

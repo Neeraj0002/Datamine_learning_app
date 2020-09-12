@@ -111,7 +111,7 @@ class _ProfileState extends State<Profile> {
         leading: IconButton(
           icon: Icon(
             Icons.exit_to_app,
-            color: appbarTextColorLight,
+            color: Colors.white,
           ),
           color: Colors.white,
           tooltip: "Logout",
@@ -328,6 +328,7 @@ class _ProfileState extends State<Profile> {
           FlatButton(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => LoginScreen(
+                      fromAppDrawer: false,
                       fromSplashScreen: false,
                       fromMyCourse: false,
                       fromProfile: true,

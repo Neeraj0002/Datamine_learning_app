@@ -61,6 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             settings: RouteSettings(name: "/loginScreen"),
                             builder: (context) => LoginScreen(
+                                  fromAppDrawer: false,
                                   fromProfile: false,
                                   fromSignUp: false,
                                   parent: null,

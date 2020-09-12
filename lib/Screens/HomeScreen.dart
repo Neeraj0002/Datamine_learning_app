@@ -36,16 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   DatabaseMethods databaseMethods = DatabaseMethods();
   bool userLoggedIn = false;
   bool connected = false;
-  Future setNameAndID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String data = prefs.getString("userData");
-    if (data != null) {
-      var parsedData = jsonDecode(data);
-      print(parsedData);
-      Constants.myName = "${parsedData["fName"]} ${parsedData["lName"]}";
-      Constants.id = parsedData["id"];
-    }
-  }
 
   sendMessage() {
     List<String> users = [Constants.myName, "Admin"];
@@ -131,19 +121,18 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: CustomAppDrawer(),
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
         backgroundColor: appBarColorlight,
         leading: connected
             ? IconButton(
                 icon: Icon(Icons.menu),
-                color: appbarTextColorLight,
+                color: Colors.white,
                 onPressed: () {
                   homeKey.currentState.openDrawer();
                 },
               )
             : Container(),
         title: Text(
-          "Datamine",
+          "DATAMINE",
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -151,21 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ? */
           connected
               ? IconButton(
-                  color: appbarTextColorLight,
+                  color: Colors.white,
                   icon: Icon(Icons.notifications),
-                  onPressed: () {
-                    if (Constants.email == "admin.torc@gmail.com") {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ChatRoom()));
-                    } else {
-                      sendMessage();
-                    }
-                  },
+                  onPressed: () {},
                 )
               : Container(),
           connected
               ? IconButton(
-                  color: appbarTextColorLight,
+                  color: Colors.white,
                   icon: Icon(Icons.search),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -301,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (imageSnapshot.connectionState ==
                                           ConnectionState.done &&
                                       imageSnapshot.hasData) {
-                                    return Container(
+                                    /*return Container(
                                       height: 200,
                                       width: MediaQuery.of(context).size.width,
                                       child: Swiper(
@@ -338,10 +320,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           );
                                         },
                                       ),
-                                    );
-                                    /*return ImageSlider(
+                                    );*/
+                                    return ImageSlider(
                                         imgUrls: imageSnapshot.data["data"]
-                                            ["images"]);*/
+                                            ["images"]);
                                   } else {
                                     return Container(
                                       height: 200,

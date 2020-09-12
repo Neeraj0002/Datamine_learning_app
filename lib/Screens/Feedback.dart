@@ -51,7 +51,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
         appBar: AppBar(
           backgroundColor: appBarColorlight,
           centerTitle: true,
-          iconTheme: IconThemeData(color: appbarTextColorLight),
+          iconTheme: IconThemeData(color: Colors.white),
           title: Text(
             "Feedback",
             style: TextStyle(color: Colors.white),

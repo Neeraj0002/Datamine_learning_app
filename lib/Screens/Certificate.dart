@@ -13,7 +13,7 @@ class _CertificateState extends State<Certificate> {
       appBar: AppBar(
         title: Text("Certificate"),
         backgroundColor: appBarColorlight,
-        iconTheme: IconThemeData(color: appbarTextColorLight),
+        iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
