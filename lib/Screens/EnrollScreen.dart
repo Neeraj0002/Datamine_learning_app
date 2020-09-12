@@ -428,8 +428,9 @@ class _EnrollScreenState extends State<EnrollScreen> {
                                             offerPercentage = double.parse(
                                                 widget.coupon[i]["Offer"]
                                                     ["en-US"]);
-                                            total = widget.price *
-                                                (offerPercentage / 100);
+                                            total = widget.price -
+                                                (widget.price *
+                                                    (offerPercentage / 100));
                                             break;
                                           } else {
                                             continue;
@@ -547,7 +548,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         ),
                       ),
                       Text(
-                        "$offerPercentage%",
+                        "${offerPercentage.toStringAsFixed(1)}%",
                         style: TextStyle(
                           color: offerPercentage > 0
                               ? Colors.green
@@ -573,7 +574,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         ),
                       ),
                       Text(
-                        "₹$total",
+                        "₹${total.toStringAsFixed(1)}",
                         style: TextStyle(
                           color: Colors.green,
                           fontFamily: "Roboto",

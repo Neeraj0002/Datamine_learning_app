@@ -437,7 +437,7 @@ class _CourseDetailsState extends State<CourseDetails> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      bottomSheet: Container(
+      /*bottomSheet: Container(
         height: 70,
         width: screenWidth,
         color: Colors.white,
@@ -502,169 +502,156 @@ class _CourseDetailsState extends State<CourseDetails> {
               color: appBarColorlight,
               text: "Buy Course"),
         ),
-      ),
-      body: ListView(
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
+      ),*/
+      body: Stack(
         children: [
-          widget.demoVideo != null
-              ? Chewie(
-                  controller: chewieController,
-                )
-              : Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.imgUrl,
-                    errorWidget: (context, url, error) {
-                      return Center(
-                        child: Icon(
-                          Icons.error,
-                          color: Colors.red,
-                        ),
-                      );
-                    },
-                    progressIndicatorBuilder: (context, url, progress) {
-                      return Center(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                                appBarColorlight),
-                          ),
-                        ),
-                      );
-                    },
-                    fit: BoxFit.fill,
-                  ),
-                ),
-          Container(
-            height: 80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: screenWidth,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                    child: Text(
-                      widget.courseName,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontFamily: "Roboto",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                    ),
-                    child: Text(
-                      "₹${widget.price}",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontFamily: "Roboto",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Container(
-              height: 0.5,
-              color: Colors.grey,
-            ),
-          ),
           Column(
             children: [
-              Container(
-                width: screenWidth,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 8.0, top: 20),
-                  child: Text(
-                    "Details",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+              /*widget.demoVideo != null
+                  ? */
+              Chewie(
+                controller: chewieController,
               ),
+              /*: Container(
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.imgUrl,
+                        errorWidget: (context, url, error) {
+                          return Center(
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          );
+                        },
+                        progressIndicatorBuilder: (context, url, progress) {
+                          return Center(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: new AlwaysStoppedAnimation<Color>(
+                                    appBarColorlight),
+                              ),
+                            ),
+                          );
+                        },
+                        fit: BoxFit.fill,
+                      ),
+                    ),*/
               Container(
+                height: 70,
                 width: screenWidth,
+                color: Colors.white,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 8.0, top: 20),
-                  child: Text(
-                    widget.desc,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontFamily: "Roboto",
-                      fontSize: 14,
-                    ),
-                  ),
+                  padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
+                  child: customButton(
+                      action: () {
+                        chewieController.pause();
+                        loggedIn
+                            ? getCoupons(context)
+                            : showDialog(
+                                context: context,
+                                child: AlertDialog(
+                                  title: Text(
+                                    "Login",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "ProximaNova",
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Text(
+                                    "Please login to buy this course",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "ProximaNova",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BottomNaviBar(indexNo: 2),
+                                                settings: RouteSettings(
+                                                    name: "/homwScreen")));
+                                      },
+                                      child: Text(
+                                        "Login Now",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ));
+                      },
+                      color: appBarColorlight,
+                      text: "Buy Course"),
                 ),
               ),
             ],
           ),
-          Column(
-            children: [
-              Container(
-                width: screenWidth,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 8.0, top: 20),
-                  child: Text(
-                    "Course Outcome",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-              Column(
-                children: List.generate(
-                  widget.outcome.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: screenHeight - 370,
+              child: ListView(
+                physics: ScrollPhysics(),
+                shrinkWrap: true,
+                children: [
+                  Container(
+                    height: 80,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.arrow_right, color: Colors.black54),
                         Container(
-                          width: screenWidth * (0.85),
+                          width: screenWidth,
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 0.0, right: 8.0, top: 0),
+                            padding:
+                                const EdgeInsets.only(left: 16.0, right: 8.0),
                             child: Text(
-                              widget.outcome[index],
+                              widget.courseName,
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontFamily: "Roboto",
-                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 16.0,
+                            ),
+                            child: Text(
+                              "₹${widget.price}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontFamily: "Roboto",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -672,12 +659,108 @@ class _CourseDetailsState extends State<CourseDetails> {
                       ],
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 100,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: Container(
+                      height: 0.5,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: screenWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 8.0, top: 20),
+                          child: Text(
+                            "Details",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: screenWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 8.0, top: 20),
+                          child: Text(
+                            widget.desc,
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontFamily: "Roboto",
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: screenWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 8.0, top: 20),
+                          child: Text(
+                            "Course Outcome",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: List.generate(
+                          widget.outcome.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.arrow_right, color: Colors.black54),
+                                Container(
+                                  width: screenWidth * (0.85),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0.0, right: 8.0, top: 0),
+                                    child: Text(
+                                      widget.outcome[index],
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontFamily: "Roboto",
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
