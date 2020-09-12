@@ -98,7 +98,7 @@ class _ChatState extends State<Chat> {
                               hintText: "Message ...",
                               hintStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                               border: InputBorder.none),
                         ),
@@ -140,23 +140,23 @@ class MessageTile extends StatelessWidget {
       child: Container(
         margin:
             sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
-        padding: EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
+        padding: EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
         decoration: BoxDecoration(
             borderRadius: sendByMe
                 ? BorderRadius.only(
-                    topLeft: Radius.circular(23),
-                    topRight: Radius.circular(23),
-                    bottomLeft: Radius.circular(23))
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15))
                 : BorderRadius.only(
-                    topLeft: Radius.circular(23),
-                    topRight: Radius.circular(23),
-                    bottomRight: Radius.circular(23)),
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
             color: sendByMe ? appBarColorlight : Colors.black),
         child: Text(message,
             textAlign: TextAlign.start,
             style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontFamily: 'OverpassRegular',
                 fontWeight: FontWeight.w300)),
       ),

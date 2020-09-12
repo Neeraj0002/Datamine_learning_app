@@ -75,13 +75,13 @@ class ImageSliderItem extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0, bottom: 3),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
             color: Colors.white,
             boxShadow: [
               BoxShadow(spreadRadius: 1, blurRadius: 2, color: Colors.black12),
             ]),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           child: CachedNetworkImage(
             imageUrl: url,
             errorWidget: (context, url, error) {

@@ -345,7 +345,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "Offer Zone",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -365,7 +365,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "About Us",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -385,7 +385,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "Contact Us",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -407,7 +407,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "Share",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -427,7 +427,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "Feedback",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -441,7 +441,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           title: Text(
                             "Settings",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black54,
                               fontSize: 16,
                               fontFamily: "ProximaNova",
                             ),
@@ -451,7 +451,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                             color: appBarColorlight,
                           ),
                           children: [
-                            ListTile(
+                            /*ListTile(
                               onTap: () {
                                 if (Constants.email == "admin.torc@gmail.com") {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -490,12 +490,12 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               title: Text(
                                 "Chat with us",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.black54,
                                   fontSize: 16,
                                   fontFamily: "ProximaNova",
                                 ),
                               ),
-                            ),
+                            ),*/
                             ListTile(
                               onTap: () {
                                 Navigator.pop(context);
@@ -510,7 +510,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               title: Text(
                                 "Rate This App",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.black54,
                                   fontSize: 16,
                                   fontFamily: "ProximaNova",
                                 ),
@@ -527,7 +527,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               title: Text(
                                 "Privacy Policy",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.black54,
                                   fontSize: 16,
                                   fontFamily: "ProximaNova",
                                 ),
@@ -544,7 +544,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               title: Text(
                                 "Refund Policy",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.black54,
                                   fontSize: 16,
                                   fontFamily: "ProximaNova",
                                 ),
@@ -563,9 +563,9 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                                 color: appBarColorlight,
                               ),
                               title: Text(
-                                "Certificate",
+                                "Certificate Model",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.black54,
                                   fontSize: 16,
                                   fontFamily: "ProximaNova",
                                 ),

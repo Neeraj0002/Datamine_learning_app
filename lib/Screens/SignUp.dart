@@ -209,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   color: Colors.black,
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "OpenSans"),
+                                  fontFamily: "ProximaNova"),
                             ),
                             InkWell(
                               onTap: () {},
@@ -219,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     color: appBarColorlight,
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: "OpenSans"),
+                                    fontFamily: "ProximaNova"),
                               ),
                             )
                           ],
@@ -297,14 +297,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   "Success",
                                                   style: TextStyle(
                                                       color: Colors.green,
-                                                      fontFamily: "OpenSans",
+                                                      fontFamily: "ProximaNova",
                                                       fontSize: 18),
                                                 ),
                                                 content: Text(
                                                   "Signup successful, please login.",
                                                   style: TextStyle(
                                                       color: Colors.black,
-                                                      fontFamily: "OpenSans",
+                                                      fontFamily: "ProximaNova",
                                                       fontSize: 16),
                                                 ),
                                                 actions: [
@@ -319,7 +319,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                           color:
                                                               appBarColorlight,
                                                           fontFamily:
-                                                              "OpenSans",
+                                                              "ProximaNova",
                                                         ),
                                                       ),
                                                     ),
@@ -341,14 +341,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   "Failed",
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "OpenSans",
+                                                      fontFamily: "ProximaNova",
                                                       fontSize: 18),
                                                 ),
                                                 content: Text(
                                                   "Something went wrong, please try again",
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "OpenSans",
+                                                      fontFamily: "ProximaNova",
                                                       fontSize: 16),
                                                 ),
                                                 actions: [
@@ -361,7 +361,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                         style: TextStyle(
                                                           color: Colors.white,
                                                           fontFamily:
-                                                              "OpenSans",
+                                                              "ProximaNova",
                                                         ),
                                                       ),
                                                     ),
@@ -383,14 +383,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               "Failed",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "OpenSans",
+                                                  fontFamily: "ProximaNova",
                                                   fontSize: 18),
                                             ),
                                             content: Text(
                                               "Something went wrong, please try again",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "OpenSans",
+                                                  fontFamily: "ProximaNova",
                                                   fontSize: 16),
                                             ),
                                             actions: [
@@ -402,7 +402,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     "OK",
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "OpenSans",
+                                                      fontFamily: "ProximaNova",
                                                     ),
                                                   ),
                                                 ),
@@ -420,14 +420,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           "Failed",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontFamily: "OpenSans",
+                                              fontFamily: "ProximaNova",
                                               fontSize: 18),
                                         ),
                                         content: Text(
                                           "All fields are required",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontFamily: "OpenSans",
+                                              fontFamily: "ProximaNova",
                                               fontSize: 16),
                                         ),
                                         actions: [
@@ -439,7 +439,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 "OK",
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "OpenSans",
+                                                  fontFamily: "ProximaNova",
                                                 ),
                                               ),
                                             ),
@@ -456,14 +456,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         "Failed",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontFamily: "OpenSans",
+                                            fontFamily: "ProximaNova",
                                             fontSize: 18),
                                       ),
                                       content: Text(
                                         "Please agree to the terms and conditions.",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontFamily: "OpenSans",
+                                            fontFamily: "ProximaNova",
                                             fontSize: 16),
                                       ),
                                       actions: [
@@ -475,7 +475,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               "OK",
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                               ),
                                             ),
                                           ),

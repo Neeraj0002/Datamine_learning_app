@@ -189,7 +189,7 @@ class _CourseDetailsState extends State<CourseDetails> {
             "Payment Succesful",
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: "OpenSans",
+                fontFamily: "ProximaNova",
                 fontWeight: FontWeight.bold,
                 fontSize: 18),
           ),
@@ -205,7 +205,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               content: Text(
@@ -213,7 +213,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               actions: [
@@ -225,7 +225,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 )
@@ -246,7 +246,7 @@ class _CourseDetailsState extends State<CourseDetails> {
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: "OpenSans",
+              fontFamily: "ProximaNova",
             ),
           ),
           content: Text(
@@ -254,7 +254,7 @@ class _CourseDetailsState extends State<CourseDetails> {
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
-              fontFamily: "OpenSans",
+              fontFamily: "ProximaNova",
             ),
           ),
           actions: [
@@ -266,7 +266,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
             )
@@ -308,7 +308,7 @@ class _CourseDetailsState extends State<CourseDetails> {
             "Payment Succesful",
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: "OpenSans",
+                fontFamily: "ProximaNova",
                 fontWeight: FontWeight.bold,
                 fontSize: 18),
           ),
@@ -324,7 +324,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               content: Text(
@@ -332,7 +332,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               actions: [
@@ -344,7 +344,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 )
@@ -455,7 +455,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                             "Login",
                             style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: "OpenSans",
+                                fontFamily: "ProximaNova",
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -464,7 +464,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
-                              fontFamily: "OpenSans",
+                              fontFamily: "ProximaNova",
                               fontSize: 14,
                             ),
                           ),
@@ -500,7 +500,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                         ));
               },
               color: appBarColorlight,
-              text: "Enroll on the course"),
+              text: "Buy Course"),
         ),
       ),
       body: ListView(
@@ -551,7 +551,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                     child: Text(
                       widget.courseName,
                       style: TextStyle(
-                        color: Colors.black87,
+                        color: Colors.black54,
                         fontFamily: "Roboto",
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -599,7 +599,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.black54,
                       fontFamily: "Roboto",
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -615,9 +615,9 @@ class _CourseDetailsState extends State<CourseDetails> {
                   child: Text(
                     widget.desc,
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.black54,
                       fontFamily: "Roboto",
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                 ),
@@ -636,7 +636,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.black54,
                       fontFamily: "Roboto",
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -647,29 +647,30 @@ class _CourseDetailsState extends State<CourseDetails> {
               Column(
                 children: List.generate(
                   widget.outcome.length,
-                  (index) => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.arrow_right,
-                        color: appBarColorlight,
-                      ),
-                      Container(
-                        width: screenWidth * (0.85),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 8.0, top: 20),
-                          child: Text(
-                            widget.outcome[index],
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "Roboto",
-                              fontSize: 16,
+                  (index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.arrow_right, color: Colors.black54),
+                        Container(
+                          width: screenWidth * (0.85),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 0.0, right: 8.0, top: 0),
+                            child: Text(
+                              widget.outcome[index],
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontFamily: "Roboto",
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )

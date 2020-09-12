@@ -30,7 +30,7 @@ class customButton extends StatelessWidget {
               text,
               style: TextStyle(
                   color: Colors.white,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                   fontSize: 18,
                   fontWeight: FontWeight.w600),
             ),
@@ -58,7 +58,7 @@ class customTextButton extends StatelessWidget {
             text,
             style: TextStyle(
                 color: textColor,
-                fontFamily: "OpenSans",
+                fontFamily: "ProximaNova",
                 fontSize: 16,
                 fontWeight: FontWeight.w600),
           ),

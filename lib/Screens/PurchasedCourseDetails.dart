@@ -470,7 +470,7 @@ class _Screen2State extends State<Screen2> {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.black87,
-                            fontFamily: "OpenSans",
+                            fontFamily: "ProximaNova",
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),

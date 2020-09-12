@@ -80,7 +80,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 14,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               actions: [
@@ -92,7 +92,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 ),
@@ -107,7 +107,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       color: appBarColorlight,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 )
@@ -167,7 +167,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
-                                      fontFamily: "OpenSans",
+                                      fontFamily: "ProximaNova",
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -180,7 +180,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
-                                    fontFamily: "OpenSans",
+                                    fontFamily: "ProximaNova",
                                     fontWeight: FontWeight.bold),
                               ),
                               Padding(
@@ -230,7 +230,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                     color: Colors.white,
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
-                                                    fontFamily: "OpenSans"),
+                                                    fontFamily: "ProximaNova"),
                                               ),
                                             ),
                                           ),
@@ -266,7 +266,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
-                                  fontFamily: "OpenSans",
+                                  fontFamily: "ProximaNova",
                                   fontWeight: FontWeight.bold),
                             ),
                           ),

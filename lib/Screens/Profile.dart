@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/Appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/Screens/SignUp.dart';
@@ -17,7 +18,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  GlobalKey<ScaffoldState> _profileKey = GlobalKey<ScaffoldState>();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
   TextEditingController _fname = TextEditingController();
@@ -31,7 +31,8 @@ class _ProfileState extends State<Profile> {
   AuthService authService = new AuthService();
   DatabaseMethods databaseMethods = new DatabaseMethods();
   bool login = true;
-
+  GlobalKey<ScaffoldState> profileKey = GlobalKey<ScaffoldState>();
+  bool connected;
   Future checkConnectivity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool connection;
@@ -40,12 +41,16 @@ class _ProfileState extends State<Profile> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         connection = true;
-        prefs.setBool("connected", true).then((value) {});
+        prefs.setBool("connected", true).then((value) {
+          connected = true;
+        });
       }
     } on SocketException catch (_) {
       connection = false;
       prefs.setBool("connected", false).then((value) {
-        setState(() {});
+        setState(() {
+          connected = false;
+        });
       });
       print('not connected');
     }
@@ -100,6 +105,8 @@ class _ProfileState extends State<Profile> {
 
   _profileScreen(BuildContext context) {
     return Scaffold(
+      key: profileKey,
+      drawer: CustomAppDrawer(),
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
@@ -108,70 +115,81 @@ class _ProfileState extends State<Profile> {
           "Profile",
           style: TextStyle(color: Colors.white),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.exit_to_app,
+        leading: connected
+            ? IconButton(
+                icon: Icon(Icons.menu),
+                color: Colors.white,
+                onPressed: () {
+                  profileKey.currentState.openDrawer();
+                },
+              )
+            : Container(),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
             color: Colors.white,
+            tooltip: "Logout",
+            onPressed: () async {
+              showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "ProximaNova",
+                      ),
+                    ),
+                    content: Text(
+                      "Are you sure?",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: "ProximaNova",
+                      ),
+                    ),
+                    actions: [
+                      FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "ProximaNova",
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.remove("userData");
+                          Navigator.of(context).pop();
+                          setState(() {});
+                        },
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: appBarColorlight,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "ProximaNova",
+                          ),
+                        ),
+                      )
+                    ],
+                  ));
+            },
           ),
-          color: Colors.white,
-          tooltip: "Logout",
-          onPressed: () async {
-            showDialog(
-                context: context,
-                child: AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: Text(
-                    "Logout",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
-                    ),
-                  ),
-                  content: Text(
-                    "Are you sure?",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: "OpenSans",
-                    ),
-                  ),
-                  actions: [
-                    FlatButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        "No",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "OpenSans",
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.remove("userData");
-                        Navigator.of(context).pop();
-                        setState(() {});
-                      },
-                      child: Text(
-                        "Yes",
-                        style: TextStyle(
-                          color: appBarColorlight,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "OpenSans",
-                        ),
-                      ),
-                    )
-                  ],
-                ));
-          },
-        ),
+        ],
       ),
       body: FutureBuilder(
           future: getUserData(),
@@ -205,9 +223,9 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Hello,",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: "OpenSans",
-                            fontSize: 20),
+                            color: Colors.black54,
+                            fontFamily: "ProximaNova",
+                            fontSize: 18),
                       ),
                     ),
 
@@ -216,10 +234,10 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "${snapshot.data["fName"]} ${snapshot.data["lName"]}",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: "OpenSans",
+                            color: Colors.black87,
+                            fontFamily: "ProximaNova",
                             fontWeight: FontWeight.bold,
-                            fontSize: 35),
+                            fontSize: 30),
                       ),
                     ),
 
@@ -230,15 +248,15 @@ class _ProfileState extends State<Profile> {
                         children: [
                           Icon(
                             Icons.phone,
-                            color: appBarColorlight,
-                            size: 25,
+                            color: Colors.black87,
+                            size: 20,
                           ),
                           Text(
                             "  ${snapshot.data["phone"]}",
                             style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "OpenSans",
-                                fontSize: 20),
+                                color: Colors.black54,
+                                fontFamily: "ProximaNova",
+                                fontSize: 16),
                           ),
                         ],
                       ),
@@ -250,15 +268,15 @@ class _ProfileState extends State<Profile> {
                         children: [
                           Icon(
                             Icons.mail,
-                            color: appBarColorlight,
-                            size: 25,
+                            color: Colors.black87,
+                            size: 20,
                           ),
                           Text(
                             "  ${snapshot.data["mail"]}",
                             style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "OpenSans",
-                                fontSize: 20),
+                                color: Colors.black54,
+                                fontFamily: "ProximaNova",
+                                fontSize: 16),
                           ),
                         ],
                       ),
@@ -274,8 +292,8 @@ class _ProfileState extends State<Profile> {
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Icon(
                               Icons.home,
-                              color: appBarColorlight,
-                              size: 25,
+                              color: Colors.black87,
+                              size: 20,
                             ),
                           ),
                           SizedBox(
@@ -284,9 +302,9 @@ class _ProfileState extends State<Profile> {
                           Text(
                             "${snapshot.data["address"]["line1"]}\n${snapshot.data["address"]["line2"]}\n${snapshot.data["address"]["line3"]}",
                             style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "OpenSans",
-                                fontSize: 20),
+                                color: Colors.black54,
+                                fontFamily: "ProximaNova",
+                                fontSize: 16),
                           ),
                         ],
                       ),
@@ -306,6 +324,25 @@ class _ProfileState extends State<Profile> {
 
   _loginScreen(BuildContext context) {
     return Scaffold(
+      key: profileKey,
+      drawer: CustomAppDrawer(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Profile",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        leading: connected
+            ? IconButton(
+                icon: Icon(Icons.menu),
+                color: Colors.white,
+                onPressed: () {
+                  profileKey.currentState.openDrawer();
+                },
+              )
+            : Container(),
+        backgroundColor: appBarColorlight,
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -318,8 +355,8 @@ class _ProfileState extends State<Profile> {
                 "You are not logged in",
                 style: TextStyle(
                   color: Colors.black,
-                  fontFamily: "OpenSans",
-                  fontSize: 18,
+                  fontFamily: "ProximaNova",
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -368,9 +405,9 @@ class _ProfileState extends State<Profile> {
               child: Text(
                 "--OR--",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: "OpenSans",
-                  fontSize: 18,
+                  color: Colors.black54,
+                  fontFamily: "ProximaNova",
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -414,6 +451,12 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    checkConnectivity();
+    super.initState();
   }
 
   @override

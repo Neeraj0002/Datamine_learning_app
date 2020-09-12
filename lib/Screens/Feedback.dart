@@ -103,7 +103,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 "Feedback submitted",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: "OpenSans",
+                                  fontFamily: "ProximaNova",
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -119,7 +119,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                       color: Colors.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: "OpenSans",
+                                      fontFamily: "ProximaNova",
                                     ),
                                   ),
                                   content: Text(
@@ -127,7 +127,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
-                                      fontFamily: "OpenSans",
+                                      fontFamily: "ProximaNova",
                                     ),
                                   ),
                                   actions: [
@@ -139,7 +139,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: "OpenSans",
+                                          fontFamily: "ProximaNova",
                                         ),
                                       ),
                                     )
@@ -156,7 +156,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 "Feedback should not be empty",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: "OpenSans",
+                                    fontFamily: "ProximaNova",
                                     fontSize: 16),
                               ),
                               actions: [
@@ -167,7 +167,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                       "OK",
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontFamily: "OpenSans",
+                                        fontFamily: "ProximaNova",
                                       ),
                                     ),
                                   ),
@@ -184,7 +184,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               "Email id should not be empty",
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: "OpenSans",
+                                  fontFamily: "ProximaNova",
                                   fontSize: 16),
                             ),
                             actions: [
@@ -195,7 +195,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: "OpenSans",
+                                      fontFamily: "ProximaNova",
                                     ),
                                   ),
                                 ),
@@ -212,7 +212,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                             "Name should not be empty",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontFamily: "OpenSans",
+                                fontFamily: "ProximaNova",
                                 fontSize: 16),
                           ),
                           actions: [
@@ -223,7 +223,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   "OK",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: "OpenSans",
+                                    fontFamily: "ProximaNova",
                                   ),
                                 ),
                               ),

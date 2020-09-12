@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
             : Container(),
         title: Text(
           "DATAMINE",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 18),
         ),
         actions: [
           /*userLoggedIn
@@ -519,29 +519,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "Rate this app   ",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: "OpenSans",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                Text(
-                                                  ":)",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: "OpenSans",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 30),
-                                                ),
-                                              ],
+                                            child: Center(
+                                              child: Text(
+                                                "Hope you enjoyed learning with us.\nRate us on Play Store",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: "ProximaNova",
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
                                             ),
                                           ),
                                         )
@@ -620,8 +607,8 @@ class CategoryCard extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
-                    fontFamily: "OpenSans",
-                    fontSize: 14),
+                    fontFamily: "ProximaNova",
+                    fontSize: 12),
               ),
             ),
           ),
@@ -666,9 +653,9 @@ class GeneralItem extends StatelessWidget {
                   child: Text(
                     rating,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OpenSans",
-                      fontSize: 14,
+                      color: Colors.black54,
+                      fontFamily: "ProximaNova",
+                      fontSize: 12,
                     ),
                   ),
                 )
@@ -693,9 +680,9 @@ class GeneralItem extends StatelessWidget {
                   child: Text(
                     reviews,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OpenSans",
-                      fontSize: 14,
+                      color: Colors.black54,
+                      fontFamily: "ProximaNova",
+                      fontSize: 12,
                     ),
                   ),
                 )
@@ -720,9 +707,9 @@ class GeneralItem extends StatelessWidget {
                   child: Text(
                     users,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OpenSans",
-                      fontSize: 14,
+                      color: Colors.black54,
+                      fontFamily: "ProximaNova",
+                      fontSize: 12,
                     ),
                   ),
                 )
@@ -747,9 +734,9 @@ class GeneralItem extends StatelessWidget {
                   child: Text(
                     courses,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OpenSans",
-                      fontSize: 14,
+                      color: Colors.black54,
+                      fontFamily: "ProximaNova",
+                      fontSize: 12,
                     ),
                   ),
                 )

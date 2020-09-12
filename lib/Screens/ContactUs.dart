@@ -70,9 +70,9 @@ class ContactUs extends StatelessWidget {
                                         snapshot.data["data"]["contact"]
                                             ["Whatsapp"]["en-US"],
                                         style: TextStyle(
-                                          fontFamily: "OpenSans",
-                                          fontSize: 16,
-                                          color: Colors.black,
+                                          fontFamily: "ProximaNova",
+                                          fontSize: 14,
+                                          color: Colors.black54,
                                         ),
                                       )
                                     ],
@@ -115,9 +115,9 @@ class ContactUs extends StatelessWidget {
                                         snapshot.data["data"]["contact"]
                                             ["Mobile"]["en-US"],
                                         style: TextStyle(
-                                          fontFamily: "OpenSans",
-                                          fontSize: 16,
-                                          color: Colors.black,
+                                          fontFamily: "ProximaNova",
+                                          fontSize: 14,
+                                          color: Colors.black54,
                                         ),
                                       )
                                     ],
@@ -158,9 +158,9 @@ class ContactUs extends StatelessWidget {
                                         child: Text(
                                           "${snapshot.data["data"]["contact"]["Address"]["en-US"]}",
                                           style: TextStyle(
-                                            fontFamily: "OpenSans",
-                                            fontSize: 16,
-                                            color: Colors.black,
+                                            fontFamily: "ProximaNova",
+                                            fontSize: 14,
+                                            color: Colors.black54,
                                           ),
                                         ),
                                       )

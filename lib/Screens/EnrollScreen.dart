@@ -74,7 +74,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
             "Payment Succesful",
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: "OpenSans",
+                fontFamily: "ProximaNova",
                 fontWeight: FontWeight.bold,
                 fontSize: 18),
           ),
@@ -90,7 +90,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               content: Text(
@@ -98,7 +98,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               actions: [
@@ -110,7 +110,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 )
@@ -131,7 +131,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: "OpenSans",
+              fontFamily: "ProximaNova",
             ),
           ),
           content: Text(
@@ -139,7 +139,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
-              fontFamily: "OpenSans",
+              fontFamily: "ProximaNova",
             ),
           ),
           actions: [
@@ -151,7 +151,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
             )
@@ -194,7 +194,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
             "Payment Succesful",
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: "OpenSans",
+                fontFamily: "ProximaNova",
                 fontWeight: FontWeight.bold,
                 fontSize: 18),
           ),
@@ -210,7 +210,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               content: Text(
@@ -218,7 +218,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
-                  fontFamily: "OpenSans",
+                  fontFamily: "ProximaNova",
                 ),
               ),
               actions: [
@@ -230,7 +230,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 )
@@ -286,7 +286,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
             centerTitle: true,
             iconTheme: IconThemeData(color: Colors.white),
             title: Text(
-              "Enroll",
+              "Buy Course",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -302,7 +302,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                     _openCheckout();
                   },
                   color: appBarColorlight,
-                  text: "Enroll on the course"),
+                  text: "Buy Course"),
             ),
           ),
           body: ListView(children: [
@@ -325,10 +325,10 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         child: Text(
                           "Do you have a coupon code?",
                           style: TextStyle(
-                            color: Colors.black87,
+                            color: Colors.black54,
                             fontFamily: "Roboto",
                             fontWeight: FontWeight.w800,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                       )
@@ -466,7 +466,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                                             "Apply",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -478,7 +478,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                                     "Offer Applied",
                                     style: TextStyle(
                                         color: Colors.green,
-                                        fontFamily: "OpenSans",
+                                        fontFamily: "ProximaNova",
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -498,10 +498,10 @@ class _EnrollScreenState extends State<EnrollScreen> {
                   child: Text(
                     "Information",
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.black54,
                       fontFamily: "Roboto",
                       fontWeight: FontWeight.w800,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 )
@@ -567,7 +567,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                       Text(
                         "Total:",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.black87,
                           fontFamily: "Roboto",
                           fontSize: 14,
                         ),
@@ -575,7 +575,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                       Text(
                         "₹$total",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.green,
                           fontFamily: "Roboto",
                           fontSize: 14,
                         ),

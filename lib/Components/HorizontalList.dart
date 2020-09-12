@@ -19,10 +19,10 @@ class HorizontalDataList extends StatelessWidget {
                     child: Text(
                       title,
                       style: TextStyle(
-                        color: Colors.black87,
+                        color: Colors.black54,
                         fontFamily: "Roboto",
                         fontWeight: FontWeight.w800,
-                        fontSize: 20,
+                        fontSize: 16,
                       ),
                     ),
                   )

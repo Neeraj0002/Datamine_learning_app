@@ -20,8 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ChatScreen2.dart';
 
-GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
-
 class MainCourses extends StatefulWidget {
   bool fromLogin;
   MainCourses({@required this.fromLogin});
@@ -32,7 +30,7 @@ class MainCourses extends StatefulWidget {
 class _MainCoursesState extends State<MainCourses> {
   bool _connected = false;
   bool userLoggedIn = false;
-
+  GlobalKey<ScaffoldState> myCourses = GlobalKey<ScaffoldState>();
   Future checkConnectivity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool connection;
@@ -124,7 +122,7 @@ class _MainCoursesState extends State<MainCourses> {
                     },
                   )
                 : Container(),
-            actions: [
+            /*actions: [
               userLoggedIn
                   ? _connected
                       ? IconButton(
@@ -141,10 +139,10 @@ class _MainCoursesState extends State<MainCourses> {
                         )
                       : Container()
                   : Container(),
-            ],
+            ],*/
             title: Text(
               "Courses",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
             bottom: TabBar(
               indicatorColor: appbarTextColorLight,
@@ -226,8 +224,8 @@ class _MyCoursesState extends State<MyCourses> {
                 "You are not logged in",
                 style: TextStyle(
                   color: Colors.black,
-                  fontFamily: "OpenSans",
-                  fontSize: 18,
+                  fontFamily: "ProximaNova",
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -237,7 +235,7 @@ class _MyCoursesState extends State<MyCourses> {
             onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => BottomNaviBar(indexNo: 2),
-                  settings: RouteSettings(name: "/homwScreen")));
+                  settings: RouteSettings(name: "/homeScreen")));
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -429,7 +427,7 @@ class _MyCoursesState extends State<MyCourses> {
                                                           style: TextStyle(
                                                               color: Colors.red,
                                                               fontFamily:
-                                                                  "OpenSans",
+                                                                  "ProximaNova",
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600,
@@ -443,7 +441,7 @@ class _MyCoursesState extends State<MyCourses> {
                                                               color:
                                                                   Colors.black,
                                                               fontFamily:
-                                                                  "OpenSans",
+                                                                  "ProximaNova",
                                                               fontSize: 14),
                                                         ),
                                                         actions: [
@@ -474,7 +472,8 @@ class _MyCoursesState extends State<MyCourses> {
                                                     "Failed",
                                                     style: TextStyle(
                                                         color: Colors.red,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily:
+                                                            "ProximaNova",
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         fontSize: 16),
@@ -484,7 +483,8 @@ class _MyCoursesState extends State<MyCourses> {
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(
                                                         color: Colors.black,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily:
+                                                            "ProximaNova",
                                                         fontSize: 14),
                                                   ),
                                                   actions: [
@@ -653,14 +653,14 @@ class _MyCoursesState extends State<MyCourses> {
                                             "Failed",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                                 fontSize: 18),
                                           ),
                                           content: Text(
                                             "No internet connection",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                                 fontSize: 16),
                                           ),
                                           actions: [
@@ -672,7 +672,7 @@ class _MyCoursesState extends State<MyCourses> {
                                                   "OK",
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "OpenSans",
+                                                    fontFamily: "ProximaNova",
                                                   ),
                                                 ),
                                               ),

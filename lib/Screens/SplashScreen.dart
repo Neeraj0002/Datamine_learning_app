@@ -159,7 +159,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black45,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                       fontSize: 14,
                     ),
                   ),
@@ -168,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black54,
-                        fontFamily: "OpenSans",
+                        fontFamily: "ProximaNova",
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),

@@ -181,12 +181,12 @@ class _Screen1State extends State<Screen1> {
             title: Text(
               "Failed",
               style: TextStyle(
-                  color: Colors.white, fontFamily: "OpenSans", fontSize: 18),
+                  color: Colors.white, fontFamily: "ProximaNova", fontSize: 18),
             ),
             content: Text(
               e.toString(),
               style: TextStyle(
-                  color: Colors.white, fontFamily: "OpenSans", fontSize: 16),
+                  color: Colors.white, fontFamily: "ProximaNova", fontSize: 16),
             ),
             actions: [
               FlatButton(
@@ -196,7 +196,7 @@ class _Screen1State extends State<Screen1> {
                     "OK",
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: "OpenSans",
+                      fontFamily: "ProximaNova",
                     ),
                   ),
                 ),
@@ -331,10 +331,10 @@ class _Screen1State extends State<Screen1> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.black87,
+                                color: Colors.black54,
                                 fontFamily: "Roboto",
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -358,7 +358,7 @@ class _Screen1State extends State<Screen1> {
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontFamily: "Roboto",
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ),
                                         ),
                                       ],
@@ -379,7 +379,7 @@ class _Screen1State extends State<Screen1> {
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontFamily: "Roboto",
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ),
                                         ),
                                       ],
@@ -410,7 +410,7 @@ class _Screen1State extends State<Screen1> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Colors.black87,
+                              color: Colors.black54,
                               fontFamily: "Roboto",
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -434,103 +434,103 @@ class _Screen1State extends State<Screen1> {
                               builder: (context, snapshot) {
                                 if (widget.connected == true) {
                                   return VideoListItem(
-                                      downloaded:
-                                          snapshot.data == null ? false : true,
-                                      action: () {
-                                        chewieController.pause();
-                                        if (nowPlaying != index) {
-                                          setState(() {
-                                            nowPlaying = index;
-                                            currentVideo = _data[nowPlaying]
-                                                ["Link"]["en-US"];
-                                            if (snapshot.data == true) {
-                                              File _file = File(
-                                                  '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
-                                              videoPlayerController =
-                                                  VideoPlayerController.file(
-                                                      _file);
-                                            } else {
-                                              videoPlayerController =
-                                                  VideoPlayerController.network(
-                                                      currentVideo);
-                                            }
-                                            chewieController = ChewieController(
-                                                videoPlayerController:
-                                                    videoPlayerController,
-                                                aspectRatio: 16 / 9,
-                                                autoPlay: true,
-                                                looping: true,
-                                                deviceOrientationsAfterFullScreen: [
-                                                  DeviceOrientation.portraitUp
-                                                ],
-                                                fullScreenByDefault: false,
-                                                materialProgressColors:
-                                                    ChewieProgressColors(
-                                                        playedColor:
-                                                            appBarColorlight,
-                                                        handleColor:
-                                                            appBarColorlight,
-                                                        bufferedColor:
-                                                            appbarTextColorLight),
-                                                overlay: Container(
-                                                  child: Stack(
-                                                    children: [
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .bottomRight,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            "Datamine",
-                                                            style: TextStyle(
-                                                                shadows: [
-                                                                  Shadow(
-                                                                      color: Colors
-                                                                          .black26,
-                                                                      offset:
-                                                                          Offset(
-                                                                              1,
-                                                                              1))
-                                                                ],
-                                                                color: Colors
-                                                                    .white
-                                                                    .withOpacity(
-                                                                        0.8),
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                fontSize: 12),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ));
-                                          });
-                                        }
-                                      },
-                                      downloadAction: () async {
-                                        await _handleStoragePermission(
-                                            Permission.storage);
-                                        if (downloading[index] == false) {
-                                          print("DOWNLOADING");
-                                          print(_data[index]["Link"]["en-US"]);
-                                          downloadVideo(
-                                              _data[index]["Link"]["en-US"],
-                                              index);
-                                        }
+                                    downloaded:
+                                        snapshot.data == null ? false : true,
+                                    action: () {
+                                      chewieController.pause();
+                                      if (nowPlaying != index) {
                                         setState(() {
-                                          downloading[index] =
-                                              !downloading[index];
+                                          nowPlaying = index;
+                                          currentVideo = _data[nowPlaying]
+                                              ["Link"]["en-US"];
+                                          if (snapshot.data == true) {
+                                            File _file = File(
+                                                '${widget.mainDir}/${_data[nowPlaying]["UniqueId"]["en-US"]}.mp4');
+                                            videoPlayerController =
+                                                VideoPlayerController.file(
+                                                    _file);
+                                          } else {
+                                            videoPlayerController =
+                                                VideoPlayerController.network(
+                                                    currentVideo);
+                                          }
+                                          chewieController = ChewieController(
+                                              videoPlayerController:
+                                                  videoPlayerController,
+                                              aspectRatio: 16 / 9,
+                                              autoPlay: true,
+                                              looping: true,
+                                              deviceOrientationsAfterFullScreen: [
+                                                DeviceOrientation.portraitUp
+                                              ],
+                                              fullScreenByDefault: false,
+                                              materialProgressColors:
+                                                  ChewieProgressColors(
+                                                      playedColor:
+                                                          appBarColorlight,
+                                                      handleColor:
+                                                          appBarColorlight,
+                                                      bufferedColor:
+                                                          appbarTextColorLight),
+                                              overlay: Container(
+                                                child: Stack(
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.bottomRight,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                          "Datamine",
+                                                          style: TextStyle(
+                                                              shadows: [
+                                                                Shadow(
+                                                                    color: Colors
+                                                                        .black26,
+                                                                    offset:
+                                                                        Offset(
+                                                                            1,
+                                                                            1))
+                                                              ],
+                                                              color: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.8),
+                                                              fontFamily:
+                                                                  "Roboto",
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ));
                                         });
-                                      },
-                                      percent: progress[index],
-                                      download: downloading[index],
-                                      active:
-                                          index == nowPlaying ? true : false,
-                                      icon: MdiIcons.play,
-                                      title: _data[index]["Title"]["en-US"]);
+                                      }
+                                    },
+                                    downloadAction: () async {
+                                      await _handleStoragePermission(
+                                          Permission.storage);
+                                      if (downloading[index] == false) {
+                                        print("DOWNLOADING");
+                                        print(_data[index]["Link"]["en-US"]);
+                                        downloadVideo(
+                                            _data[index]["Link"]["en-US"],
+                                            index);
+                                      }
+                                      setState(() {
+                                        downloading[index] =
+                                            !downloading[index];
+                                      });
+                                    },
+                                    percent: progress[index],
+                                    download: downloading[index],
+                                    active: index == nowPlaying ? true : false,
+                                    icon: MdiIcons.play,
+                                    title: _data[index]["Title"]["en-US"],
+                                  );
                                 } else {
                                   if (snapshot.data != null) {
                                     if (snapshot.data) {
@@ -703,7 +703,7 @@ class VideoListItem extends StatelessWidget {
                       children: [
                         Icon(
                           icon,
-                          color: active ? Colors.white : Colors.black,
+                          color: active ? Colors.white : Colors.black54,
                         ),
                         SizedBox(
                           width: 10,
@@ -815,7 +815,7 @@ class _Screen2State extends State<Screen2> {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.black87,
-                            fontFamily: "OpenSans",
+                            fontFamily: "ProximaNova",
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),

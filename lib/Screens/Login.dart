@@ -259,14 +259,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 "Failed",
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "OpenSans",
+                                                    fontFamily: "ProximaNova",
                                                     fontSize: 18),
                                               ),
                                               content: Text(
                                                 "Please check your email id and password",
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "OpenSans",
+                                                    fontFamily: "ProximaNova",
                                                     fontSize: 16),
                                               ),
                                               actions: [
@@ -278,7 +278,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       "OK",
                                                       style: TextStyle(
                                                         color: Colors.white,
-                                                        fontFamily: "OpenSans",
+                                                        fontFamily:
+                                                            "ProximaNova",
                                                       ),
                                                     ),
                                                   ),
@@ -300,14 +301,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                             "Failed",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                                 fontSize: 18),
                                           ),
                                           content: Text(
                                             "Please check your email id and password",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                                 fontSize: 16),
                                           ),
                                           actions: [
@@ -319,7 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   "OK",
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "OpenSans",
+                                                    fontFamily: "ProximaNova",
                                                   ),
                                                 ),
                                               ),
@@ -337,14 +338,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         "Failed",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontFamily: "OpenSans",
+                                            fontFamily: "ProximaNova",
                                             fontSize: 18),
                                       ),
                                       content: Text(
                                         "Please enter your username and password",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontFamily: "OpenSans",
+                                            fontFamily: "ProximaNova",
                                             fontSize: 16),
                                       ),
                                       actions: [
@@ -356,7 +357,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               "OK",
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontFamily: "OpenSans",
+                                                fontFamily: "ProximaNova",
                                               ),
                                             ),
                                           ),

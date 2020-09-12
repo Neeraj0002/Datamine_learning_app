@@ -32,7 +32,7 @@ class _AboutUsState extends State<AboutUs> {
                       "MISSION",
                       style: TextStyle(
                           color: appBarColorlight,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -41,8 +41,8 @@ class _AboutUsState extends State<AboutUs> {
                     child: Text(
                       snapshot.data["data"]["mission"],
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
+                        color: Colors.black54,
+                        fontSize: 14.0,
                       ),
                     ),
                   ),
@@ -52,7 +52,7 @@ class _AboutUsState extends State<AboutUs> {
                       "VISION",
                       style: TextStyle(
                           color: appBarColorlight,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -61,8 +61,8 @@ class _AboutUsState extends State<AboutUs> {
                     child: Text(
                       snapshot.data["data"]["vision"],
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
+                        color: Colors.black54,
+                        fontSize: 14.0,
                       ),
                     ),
                   ),
@@ -72,7 +72,7 @@ class _AboutUsState extends State<AboutUs> {
                       "MORE ABOUT US",
                       style: TextStyle(
                           color: appBarColorlight,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -81,8 +81,8 @@ class _AboutUsState extends State<AboutUs> {
                     child: Text(
                       snapshot.data["data"]["more"],
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
+                        color: Colors.black54,
+                        fontSize: 14.0,
                       ),
                     ),
                   ),
