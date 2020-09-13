@@ -5,6 +5,7 @@ import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:datamine/Screens/Certificate.dart';
 import 'package:datamine/Screens/ChatScreen2.dart';
+import 'package:datamine/Screens/DownloadedVideos.dart';
 import 'package:datamine/Screens/Feedback.dart';
 import 'package:datamine/Screens/Login.dart';
 import 'package:datamine/Screens/OfferZone.dart';
@@ -339,11 +340,11 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           onTap: () {
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => OfferZone(),
-                                settings: RouteSettings(name: "/offerZone")));
+                                builder: (context) => DownloadedVideos(),
+                                settings: RouteSettings(name: "/downloads")));
                           },
                           title: Text(
-                            "Offer Zone",
+                            "My Downloads",
                             style: TextStyle(
                               color: Colors.black54,
                               fontSize: 16,
@@ -351,7 +352,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                             ),
                           ),
                           leading: Icon(
-                            Icons.style,
+                            Icons.file_download,
                             color: appBarColorlight,
                           ),
                         ),

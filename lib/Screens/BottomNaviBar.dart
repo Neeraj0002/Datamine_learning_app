@@ -219,6 +219,7 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             currentIndex: _index,
             backgroundColor: Colors.white,
             selectedItemColor: appBarColorlight,

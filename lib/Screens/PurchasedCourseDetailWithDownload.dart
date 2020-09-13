@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:datamine/Components/colors.dart';
@@ -158,6 +159,25 @@ class _Screen1State extends State<Screen1> {
     return prefs.getString(widget.storedResultName);
   }*/
 
+  Future addToStoredList(
+    String videoUrl,
+    String videoName,
+  ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> storedList = prefs.getStringList("storedList");
+    Map _data = {
+      "video_url": videoUrl,
+      "video_name": videoName,
+    };
+    if (storedList == null) {
+      storedList = List<String>();
+      storedList.add(jsonEncode(_data));
+    } else {
+      storedList.add(jsonEncode(_data));
+    }
+    prefs.setStringList("storedList", storedList);
+  }
+
   Future<void> downloadVideo(imgUrl, index) async {
     try {
       var dir = await getApplicationDocumentsDirectory();
@@ -171,7 +191,11 @@ class _Screen1State extends State<Screen1> {
           downloading[index] = true;
           progress[index] = ((rec / total));
         });
-      }).then((value) => addDownloadLog(imgUrl).then((value) => print("set")));
+      }).then((value) => addDownloadLog(imgUrl).then((value) {
+            addToStoredList("${_data[index]["UniqueId"]["en-US"]}.mp4",
+                    "${_data[index]["Title"]["en-US"]}")
+                .then((value) => print("ALL SET!!!"));
+          }));
     } catch (e) {
       dio.close();
       showDialog(
