@@ -177,104 +177,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
                                   height: 55,
                                   child: ListView(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                      ["Categories"]
-                                                  ["Web Development"],
-                                              categoryName: "Web Development",
-                                            ),
-                                          ));
-                                        },
-                                        title: "Web Development",
-                                      ),
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                      ["Categories"]
-                                                  ["App Development"],
-                                              categoryName: "App Development",
-                                            ),
-                                          ));
-                                        },
-                                        title: "App Development",
-                                      ),
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                  ["Categories"]["Blockchain"],
-                                              categoryName: "Blockchain",
-                                            ),
-                                          ));
-                                        },
-                                        title: "Blockchain",
-                                      ),
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                  ["Categories"]["ML & AI"],
-                                              categoryName: "ML & AI",
-                                            ),
-                                          ));
-                                        },
-                                        title: "ML & AI",
-                                      ),
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                      ["Categories"]
-                                                  ["Data Science"],
-                                              categoryName: "Data Science",
-                                            ),
-                                          ));
-                                        },
-                                        title: "Data Science",
-                                      ),
-                                      CategoryCard(
-                                        action: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            settings: RouteSettings(
-                                                name: "/courseList"),
-                                            builder: (context) => CourseList(
-                                              data: snapshot.data["data"]
-                                                  ["Categories"]["Others"],
-                                              categoryName: "Others",
-                                            ),
-                                          ));
-                                        },
-                                        title: "Others",
-                                      )
-                                    ],
-                                  ),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      children: List.generate(
+                                          snapshot
+                                              .data["data"]["CList"]
+                                                  ["allCategory"]
+                                              .length, (index) {
+                                        List _courseList = List();
+                                        for (int i = 0;
+                                            i <
+                                                snapshot
+                                                    .data["data"]["All"]
+                                                        ["courses"]
+                                                    .length;
+                                            i++) {
+                                          if (snapshot.data["data"]["All"]
+                                                      ["courses"][i]["Category"]
+                                                      ["en-US"]
+                                                  .toString()
+                                                  .toLowerCase() ==
+                                              snapshot.data["data"]["CList"]
+                                                      ["allCategory"][index]
+                                                  .toString()
+                                                  .toLowerCase()) {
+                                            _courseList.add(
+                                                snapshot.data["data"]["All"]
+                                                    ["courses"][i]);
+                                          }
+                                        }
+                                        return CategoryCard(
+                                          action: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              settings: RouteSettings(
+                                                  name: "/courseList"),
+                                              builder: (context) => CourseList(
+                                                data: _courseList,
+                                                categoryName: "Web Development",
+                                              ),
+                                            ));
+                                          },
+                                          title: snapshot.data["data"]["CList"]
+                                              ["allCategory"][index],
+                                        );
+                                      })),
                                 ),
                               ),
                               FutureBuilder(

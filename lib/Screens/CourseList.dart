@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CourseList extends StatefulWidget {
-  var data;
+  List data;
   final String categoryName;
   CourseList({@required this.categoryName, @required this.data});
   @override
@@ -15,6 +15,8 @@ class CourseList extends StatefulWidget {
 }
 
 class _CourseListState extends State<CourseList> {
+  List _dataList;
+
   getCourseListData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = prefs.getString("courseListData");
