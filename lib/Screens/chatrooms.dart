@@ -1,3 +1,4 @@
+import 'package:datamine/Components/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:datamine/Screens/ChatScreen2.dart';
 import 'package:datamine/constants.dart';
@@ -54,6 +55,7 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: appBarColorlight,
         title: Text("Admin Datamine"),
       ),
       body: Container(
@@ -85,7 +87,7 @@ class ChatRoomsTile extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: appBarColorlight,
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -101,7 +103,7 @@ class ChatRoomsTile extends StatelessWidget {
                   child: Text(userName.substring(0, 1),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.blue,
+                          color: appBarColorlight,
                           fontSize: 14,
                           fontFamily: 'OverpassRegular',
                           fontWeight: FontWeight.bold)),

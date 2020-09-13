@@ -24,6 +24,7 @@ class BottomNaviBar extends StatefulWidget {
 class _BottomNaviBarState extends State<BottomNaviBar> {
   int _index = 0;
   bool userLoggedIn = false;
+  DatabaseMethods databaseMethods = DatabaseMethods();
   Future checkUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = prefs.getString("userData");
@@ -47,7 +48,6 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
       if (Constants.email == "admin.torc@gmail.com") {
         return ChatRoom();
       } else {
-        DatabaseMethods databaseMethods = DatabaseMethods();
         List<String> users = [Constants.myName, "Admin"];
 
         String chatRoomId = "${Constants.id}_Admin";

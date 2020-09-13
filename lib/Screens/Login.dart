@@ -45,11 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result != null) {
         Map<String, String> userDataMap = {
           "userName": "$fname $lname",
-          "userEmail": _username.text
+          "userEmail": _username.text,
+          "userId": result.uid,
         };
 
-        databaseMethods.addUserInfo(userDataMap);
-        status = "success";
+        databaseMethods
+            .addUserInfo(userDataMap)
+            .then((value) => status = "success");
       }
     });
     return status;

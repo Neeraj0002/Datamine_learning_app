@@ -45,7 +45,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (result != null) {
         Map<String, String> userDataMap = {
           "userName": "${_fname.text} ${_lname.text}",
-          "userEmail": _username.text
+          "userEmail": _username.text,
+          "userId": result.uid,
         };
 
         databaseMethods.addUserInfo(userDataMap);
