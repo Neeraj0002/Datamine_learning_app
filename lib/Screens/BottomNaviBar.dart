@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/ChatScreen2.dart';
+import 'package:datamine/Screens/ChatUser.dart';
 import 'package:datamine/Screens/chatrooms.dart';
 import 'package:datamine/constants.dart';
 import 'package:datamine/services/database.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/Screens/HomeScreen.dart';
@@ -57,10 +59,9 @@ class _BottomNaviBarState extends State<BottomNaviBar> {
           "chatRoomId": chatRoomId,
         };
 
-        databaseMethods.addChatRoom(chatRoom, chatRoomId);
+        //databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
-        return Chat(
-          chatRoomId: chatRoomId,
+        return ChatUser(
           name: "Chat",
         );
       }

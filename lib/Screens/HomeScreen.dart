@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datamine/API/generalRequest.dart';
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/ChatUser.dart';
 import 'package:datamine/Screens/CourseList.dart';
+import 'package:datamine/Screens/Notifications.dart';
 import 'package:datamine/Screens/Search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DatabaseMethods databaseMethods = DatabaseMethods();
   bool userLoggedIn = false;
   bool connected = false;
-
+  var notificationData;
   sendMessage() {
     List<String> users = [Constants.myName, "Admin"];
 
@@ -47,13 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
       "chatRoomId": chatRoomId,
     };
 
-    databaseMethods.addChatRoom(chatRoom, chatRoomId);
+    //databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Chat(
-                  chatRoomId: chatRoomId,
+            builder: (context) => ChatUser(
                   name: "Chat",
                 )));
   }
@@ -75,7 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  getCourseListData() async {
+  getNotificationLength() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt("notificationLength");
+  }
+
+  Future getCourseListData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = prefs.getString("courseListData");
     var parsedData = jsonDecode(data);
@@ -102,12 +109,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return connection;
   }
 
+  Future setNotificationCount() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("notificationLength",
+        notificationData["data"]["Notification"]["notifications"].length);
+    setState(() {});
+    return "done";
+  }
+
   @override
   void initState() {
     checkUserLoggedIn();
     checkConnectivity().then((value) {
       setState(() {
         connected = value;
+      });
+      getCourseListData().then((value) {
+        setState(() {
+          notificationData = value;
+        });
       });
     });
 
@@ -139,10 +159,74 @@ class _HomeScreenState extends State<HomeScreen> {
           /*userLoggedIn
               ? */
           connected
-              ? IconButton(
-                  color: Colors.white,
-                  icon: Icon(Icons.notifications),
-                  onPressed: () {},
+              ? Stack(
+                  children: [
+                    FutureBuilder(
+                      future: getNotificationLength(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (notificationData["data"]["Notification"]
+                                      ["notifications"]
+                                  .length ==
+                              snapshot.data) {
+                            return Center(
+                              child: IconButton(
+                                color: Colors.white,
+                                icon: Icon(Icons.notifications),
+                                onPressed: () {
+                                  if (notificationData != null) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      settings:
+                                          RouteSettings(name: "/notifications"),
+                                      builder: (context) => NotificationPage(
+                                          data: notificationData["data"]
+                                                  ["Notification"]
+                                              ["notifications"]),
+                                    ));
+                                  }
+                                },
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: AvatarGlow(
+                                glowColor: Colors.white,
+                                endRadius: 30.0,
+                                duration: Duration(milliseconds: 2000),
+                                repeat: true,
+                                showTwoGlows: true,
+                                repeatPauseDuration:
+                                    Duration(milliseconds: 100),
+                                child: IconButton(
+                                  color: Colors.white,
+                                  icon: Icon(Icons.notifications),
+                                  onPressed: () {
+                                    if (notificationData != null) {
+                                      setNotificationCount().then((value) {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          settings: RouteSettings(
+                                              name: "/notifications"),
+                                          builder: (context) =>
+                                              NotificationPage(
+                                                  data: notificationData["data"]
+                                                          ["Notification"]
+                                                      ["notifications"]),
+                                        ));
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          return Container();
+                        }
+                      },
+                    )
+                  ],
                 )
               : Container(),
           connected
@@ -214,7 +298,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   name: "/courseList"),
                                               builder: (context) => CourseList(
                                                 data: _courseList,
-                                                categoryName: "Web Development",
+                                                categoryName: snapshot
+                                                        .data["data"]["CList"]
+                                                    ["allCategory"][index],
                                               ),
                                             ));
                                           },

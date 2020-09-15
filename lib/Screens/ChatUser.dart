@@ -7,19 +7,19 @@ import 'package:datamine/services/database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatAdmin extends StatefulWidget {
-  final String chatRoomId;
+class ChatUser extends StatefulWidget {
   final String name;
-  ChatAdmin({this.chatRoomId, @required this.name});
+  ChatUser({@required this.name});
 
   @override
-  _ChatAdminState createState() => _ChatAdminState();
+  _ChatUserState createState() => _ChatUserState();
 }
 
-class _ChatAdminState extends State<ChatAdmin> {
-  Stream<QuerySnapshot> chats;
+class _ChatUserState extends State<ChatUser> {
+  //Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
   String groupChatId;
+  String peerId = "dN4ypivFyXQwT1Dkd4zVkkVDtm52";
   Widget chatMessages() {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
@@ -56,16 +56,18 @@ class _ChatAdminState extends State<ChatAdmin> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString("firebaseId") ?? '';
     Constants.firebaseId = id;
-    if (id.hashCode <= widget.chatRoomId.hashCode) {
-      groupChatId = '$id-${widget.chatRoomId}';
+    if (id.hashCode <= peerId.hashCode) {
+      groupChatId = '$id-$peerId';
     } else {
-      groupChatId = '${widget.chatRoomId}-$id';
+      groupChatId = '$peerId-$id';
     }
     FirebaseFirestore.instance
         .collection('users')
         .doc(id)
-        .update({'chattingWith': widget.chatRoomId});
-    setState(() {});
+        .update({'chattingWith': peerId});
+    setState(() {
+      print("running 1");
+    });
   }
 
   addMessage(String message) {
@@ -86,7 +88,7 @@ class _ChatAdminState extends State<ChatAdmin> {
           documentReference,
           {
             'idFrom': Constants.firebaseId,
-            'idTo': widget.chatRoomId,
+            'idTo': peerId,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
             'content': message,
           },
@@ -94,6 +96,7 @@ class _ChatAdminState extends State<ChatAdmin> {
       });
 
       setState(() {
+        print("running 2");
         messageEditingController.clear();
       });
     } else {
@@ -109,14 +112,21 @@ class _ChatAdminState extends State<ChatAdmin> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     groupChatId = '';
     setChatTo();
-    DatabaseMethods().getChats(widget.chatRoomId).then((val) {
+
+    /*DatabaseMethods().getChats(peerId).then((val) {
       setState(() {
+        print("running 3");
         chats = val;
       });
-    });
+    });*/
     super.initState();
   }
 
@@ -199,13 +209,6 @@ class MessageTile extends StatelessWidget {
             sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
         padding: EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
         decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                spreadRadius: 1,
-                blurRadius: 2,
-              )
-            ],
             borderRadius: sendByMe
                 ? BorderRadius.only(
                     topLeft: Radius.circular(15),
@@ -215,14 +218,14 @@ class MessageTile extends StatelessWidget {
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
                     bottomRight: Radius.circular(15)),
-            color: Colors.white),
+            color: sendByMe ? appBarColorlight : Colors.black),
         child: Text(message,
             textAlign: TextAlign.start,
             style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontFamily: 'OverpassRegular',
-            )),
+                color: Colors.white,
+                fontSize: 14,
+                fontFamily: 'OverpassRegular',
+                fontWeight: FontWeight.w300)),
       ),
     );
   }

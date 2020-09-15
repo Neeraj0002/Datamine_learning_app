@@ -10,6 +10,7 @@ import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:datamine/Screens/SignUp.dart';
 import 'package:datamine/services/auth.dart';
 import 'package:datamine/services/database.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,13 +45,15 @@ class _LoginScreenState extends State<LoginScreen> {
         .then((result) {
       if (result != null) {
         Map<String, String> userDataMap = {
-          "userName": "$fname $lname",
-          "userEmail": _username.text,
-          "userId": result.uid,
+          'nickname': "$fname $lname",
+          'email': _username.text,
+          'id': result.uid,
+          'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+          'chattingWith': null
         };
 
         databaseMethods
-            .addUserInfo(userDataMap)
+            .addUserInfo(userDataMap, result.uid)
             .then((value) => status = "success");
       }
     });
@@ -58,22 +61,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn(String fname, String lname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     String status = "fail";
     await authService
         .signInWithEmailAndPassword(_username.text, _password.text)
         .then((result) async {
       if (result != null) {
-        QuerySnapshot userInfoSnapshot =
-            await DatabaseMethods().getUserInfo(_username.text);
-        print("done");
         status = "success";
-      } else {
+        prefs.setString("firebaseId", result.uid).then((value) => print("Set"));
+      }
+      /*else {
+        print("signing up");
         await singUpFirebase(fname, lname).then((value) {
           status = value;
           print(value);
         });
         print(status);
-      }
+      }*/
     });
     return status;
   }
@@ -159,19 +163,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .requestFocus(new FocusNode());
                               if (_username.text.length != 0 &&
                                   _password.text.length != 0) {
-                                print("Here 1");
                                 setState(() {
                                   isLoading = true;
                                 });
                                 loginAPI(
                                         context, _username.text, _password.text)
                                     .then((value) async {
-                                  print("Here 2");
                                   if (value != "fail") {
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
                                     var parsedValue = jsonDecode(value);
-                                    print("Here 3");
+                                    print("API LOGIN DONE");
                                     signIn(
                                             parsedValue["data"]["details"]
                                                 ["FirstName"]["en-US"],
@@ -179,6 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ["LastName"]["en-US"])
                                         .then((secondvalue) async {
                                       if (secondvalue != "fail") {
+                                        print("FIREBASE LOGIN DONE");
                                         Map data = {
                                           "id": parsedValue["data"]["id"],
                                           "fName": parsedValue["data"]
@@ -220,7 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ));
                                           } else if (widget.fromSignUp) {
                                             Navigator.pop(context);
-                                            Navigator.pop(context);
                                             widget.parent.setState(() {});
                                           } else if (widget.fromMyCourse) {
                                             Navigator.pop(context);
@@ -249,49 +251,197 @@ class _LoginScreenState extends State<LoginScreen> {
                                           }
                                         });
                                       } else {
-                                        print("Here 24");
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        showDialog(
-                                            context: context,
-                                            child: AlertDialog(
-                                              backgroundColor: Colors.red,
-                                              title: Text(
-                                                "Failed",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "ProximaNova",
-                                                    fontSize: 18),
-                                              ),
-                                              content: Text(
-                                                "Please check your email id and password",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "ProximaNova",
-                                                    fontSize: 16),
-                                              ),
-                                              actions: [
-                                                FlatButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "OK",
-                                                      style: TextStyle(
+                                        singUpFirebase(
+                                                parsedValue["data"]["details"]
+                                                    ["FirstName"]["en-US"],
+                                                parsedValue["data"]["details"]
+                                                    ["LastName"]["en-US"])
+                                            .then((thirdvalue) {
+                                          if (thirdvalue != 'fail') {
+                                            print("FIREBASE SIGNUP DONE");
+                                            signIn(
+                                                    parsedValue["data"]
+                                                            ["details"]
+                                                        ["FirstName"]["en-US"],
+                                                    parsedValue["data"]
+                                                            ["details"]
+                                                        ["LastName"]["en-US"])
+                                                .then((fourthvalue) {
+                                              if (fourthvalue != "fail") {
+                                                print("FIREBASE LOGIN DONE");
+                                                Map data = {
+                                                  "id": parsedValue["data"]
+                                                      ["id"],
+                                                  "fName": parsedValue["data"]
+                                                          ["details"]
+                                                      ["FirstName"]["en-US"],
+                                                  "lName": parsedValue["data"]
+                                                          ["details"]
+                                                      ["LastName"]["en-US"],
+                                                  "mail": parsedValue["data"]
+                                                          ["details"]["MailId"]
+                                                      ["en-US"],
+                                                  "phone": parsedValue["data"]
+                                                          ["details"]["Contact"]
+                                                      ["en-US"],
+                                                  "address": {
+                                                    "line1": parsedValue["data"]
+                                                            ["details"]
+                                                        ["Address"]["en-US"][0],
+                                                    "line2": parsedValue["data"]
+                                                            ["details"]
+                                                        ["Address"]["en-US"][1],
+                                                    "line3": parsedValue["data"]
+                                                            ["details"]
+                                                        ["Address"]["en-US"][2]
+                                                  }
+                                                };
+
+                                                prefs
+                                                    .setString("userData",
+                                                        jsonEncode(data))
+                                                    .then((value) {
+                                                  print("DATA SAVED");
+                                                  if (widget.fromProfile) {
+                                                    Navigator.pop(context);
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                      settings: RouteSettings(
+                                                          name: "/indexPage"),
+                                                      builder: (context) =>
+                                                          BottomNaviBar(
+                                                        indexNo: 2,
+                                                      ),
+                                                    ));
+                                                  } else if (widget
+                                                      .fromSignUp) {
+                                                    Navigator.pop(context);
+                                                    widget.parent
+                                                        .setState(() {});
+                                                  } else if (widget
+                                                      .fromMyCourse) {
+                                                    Navigator.pop(context);
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                      settings: RouteSettings(
+                                                          name: "/indexPage"),
+                                                      builder: (context) =>
+                                                          BottomNaviBar(
+                                                        indexNo: 1,
+                                                      ),
+                                                    ));
+                                                  } else if (widget
+                                                          .fromSplashScreen ||
+                                                      widget.fromAppDrawer) {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                            MaterialPageRoute(
+                                                      settings: RouteSettings(
+                                                          name: "/indexPage"),
+                                                      builder: (context) =>
+                                                          BottomNaviBar(
+                                                        indexNo: 0,
+                                                      ),
+                                                    ));
+                                                  }
+                                                });
+                                              } else {
+                                                print("FIREBASE LOGIN FAILED");
+                                                setState(() {
+                                                  isLoading = false;
+                                                });
+                                                showDialog(
+                                                    context: context,
+                                                    child: AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      title: Text(
+                                                        "Failed",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                "ProximaNova",
+                                                            fontSize: 18),
+                                                      ),
+                                                      content: Text(
+                                                        "Please check your email id and password",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                "ProximaNova",
+                                                            fontSize: 16),
+                                                      ),
+                                                      actions: [
+                                                        FlatButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "OK",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily:
+                                                                    "ProximaNova",
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ));
+                                              }
+                                            });
+                                          } else {
+                                            print("FIREBASE SIGNUP FAILED");
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            showDialog(
+                                                context: context,
+                                                child: AlertDialog(
+                                                  backgroundColor: Colors.red,
+                                                  title: Text(
+                                                    "Failed",
+                                                    style: TextStyle(
                                                         color: Colors.white,
                                                         fontFamily:
                                                             "ProximaNova",
-                                                      ),
-                                                    ),
+                                                        fontSize: 18),
                                                   ),
-                                                )
-                                              ],
-                                            ));
+                                                  content: Text(
+                                                    "Please check your email id and password",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            "ProximaNova",
+                                                        fontSize: 16),
+                                                  ),
+                                                  actions: [
+                                                    FlatButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "OK",
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                "ProximaNova",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ));
+                                          }
+                                        });
                                       }
                                     });
                                   } else {
-                                    print("Here 4");
                                     setState(() {
                                       isLoading = false;
                                     });

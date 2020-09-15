@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
+import 'package:datamine/Screens/ChatUser.dart';
 import 'package:datamine/Screens/PurchasedCourseDetailWithDownload.dart';
 import 'package:datamine/Screens/PurchasedCourseDetails.dart';
 import 'package:datamine/Screens/chatrooms.dart';
@@ -62,13 +63,12 @@ class _MainCoursesState extends State<MainCourses> {
       "chatRoomId": chatRoomId,
     };
 
-    databaseMethods.addChatRoom(chatRoom, chatRoomId);
+    //databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Chat(
-                  chatRoomId: chatRoomId,
+            builder: (context) => ChatUser(
                   name: "Chat",
                 )));
   }

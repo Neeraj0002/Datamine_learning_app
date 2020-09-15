@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/Appdrawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/Screens/SignUp.dart';
@@ -68,7 +70,7 @@ class _ProfileState extends State<Profile> {
           "userEmail": _username.text
         };
 
-        databaseMethods.addUserInfo(userDataMap);
+        databaseMethods.addUserInfo(userDataMap, result.uid);
         status = "success";
       }
     });
@@ -76,15 +78,17 @@ class _ProfileState extends State<Profile> {
   }
 
   Future signIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     String status = "fail";
     await authService
         .signInWithEmailAndPassword(_username.text, _password.text)
         .then((result) async {
       if (result != null) {
-        QuerySnapshot userInfoSnapshot =
+        DocumentSnapshot userInfoSnapshot =
             await DatabaseMethods().getUserInfo(_username.text);
         print("done");
         status = "success";
+        prefs.setString("firebaseId", result.uid);
       } else {
         status = "fail";
       }
@@ -173,6 +177,7 @@ class _ProfileState extends State<Profile> {
                               await SharedPreferences.getInstance();
                           prefs.remove("userData");
                           Navigator.of(context).pop();
+                          await FirebaseAuth.instance.signOut();
                           setState(() {});
                         },
                         child: Text(

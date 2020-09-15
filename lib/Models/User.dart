@@ -1,4 +1,4 @@
-class User {
+class UserFirebase {
   final String uid;
-  User({this.uid});
+  UserFirebase({this.uid});
 }

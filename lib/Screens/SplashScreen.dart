@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/Login.dart';
 import 'package:datamine/Screens/onBoarding.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:datamine/API/courseListRequst.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:datamine/Screens/appCrashed.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,6 +21,75 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  String currentUserId;
+
+  void registerNotification() {
+    firebaseMessaging.requestNotificationPermissions();
+
+    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+      print('onMessage: $message');
+      Platform.isAndroid
+          ? showNotification(message['notification'])
+          : showNotification(message['aps']['alert']);
+      return;
+    }, onResume: (Map<String, dynamic> message) {
+      print('onResume: $message');
+      return;
+    }, onLaunch: (Map<String, dynamic> message) {
+      print('onLaunch: $message');
+      return;
+    });
+
+    firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserId)
+          .update({'pushToken': token});
+    }).catchError((err) {
+      Fluttertoast.showToast(
+          msg: err.message.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    });
+  }
+
+  void showNotification(message) async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      Platform.isAndroid
+          ? 'com.torcinfotech.datamine'
+          : 'com.torcinfotech.datamine',
+      'Datamine',
+      'Datamine',
+      playSound: true,
+      enableVibration: true,
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    print(message);
+//    print(message['body'].toString());
+//    print(json.encode(message));
+
+    await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
+        message['body'].toString(), platformChannelSpecifics,
+        payload: json.encode(message));
+
+//    await flutterLocalNotificationsPlugin.show(
+//        0, 'plain title', 'plain body', platformChannelSpecifics,
+//        payload: 'item x');
+  }
+
   Future getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = prefs.getString("userData");
@@ -26,6 +99,15 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       return "notLoggedIn";
     }
+  }
+
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   Future checkFirstTime() async {
@@ -51,6 +133,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   if (firstTime != null) {
                     getUserData().then((value) {
                       if (value != "notLoggedIn") {
+                        /*registerNotification();
+                        configLocalNotification();*/
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                           settings: RouteSettings(name: "/homeScreen"),
                           builder: (context) => BottomNaviBar(
@@ -71,10 +155,12 @@ class _SplashScreenState extends State<SplashScreen> {
                       }
                     });
                   } else {
-                    prefs.setBool("firstTime", false).then((value) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          settings: RouteSettings(name: "/homeScreen"),
-                          builder: (context) => OnBoardingPage()));
+                    prefs.setInt("notificationLength", 0).then((value) {
+                      prefs.setBool("firstTime", false).then((value) {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            settings: RouteSettings(name: "/onboardingScreen"),
+                            builder: (context) => OnBoardingPage()));
+                      });
                     });
                   }
                 });

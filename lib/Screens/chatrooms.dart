@@ -1,8 +1,10 @@
 import 'package:datamine/Components/colors.dart';
+import 'package:datamine/Screens/ChatUser.dart';
 import 'package:flutter/material.dart';
 import 'package:datamine/Screens/ChatScreen2.dart';
 import 'package:datamine/constants.dart';
 import 'package:datamine/services/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatRoom extends StatefulWidget {
   @override
@@ -11,7 +13,6 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   Stream chatRooms;
-
   Widget chatRoomsList() {
     return StreamBuilder(
       stream: chatRooms,
@@ -21,20 +22,29 @@ class _ChatRoomState extends State<ChatRoom> {
                 itemCount: snapshot.data.documents.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  print(snapshot.data.documents[index]["users"][0]);
-                  return ChatRoomsTile(
-                    userName: snapshot.data.documents[index]["users"][0],
-                    chatRoomId:
-                        snapshot.data.documents[index].data["chatRoomId"],
-                  );
+                  print(snapshot.data.documents[index].data()['nickname']);
+                  return snapshot.data.documents[index].id !=
+                          Constants.firebaseId
+                      ? ChatRoomsTile(
+                          userName:
+                              snapshot.data.documents[index].data()['nickname'],
+                          chatRoomId: snapshot.data.documents[index].id,
+                        )
+                      : Container();
                 })
             : Container();
       },
     );
   }
 
+  setCurrentId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Constants.firebaseId = prefs.getString("firebaseId");
+  }
+
   @override
   void initState() {
+    setCurrentId();
     Constants.myName = "Admin";
     getUserInfogetChats();
     super.initState();
@@ -75,13 +85,18 @@ class ChatRoomsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Chat(
-                      chatRoomId: chatRoomId,
-                      name: userName,
-                    )));
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          if (Constants.email == "admin.torc@gmail.com") {
+            return ChatAdmin(
+              chatRoomId: chatRoomId,
+              name: userName,
+            );
+          } else {
+            return ChatUser(
+              name: userName,
+            );
+          }
+        }));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

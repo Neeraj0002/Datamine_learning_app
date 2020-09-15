@@ -42,6 +42,10 @@ class _DownloadedVideosState extends State<DownloadedVideos> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: appBarColorlight,
+        title: Text(
+          "DATAMINE",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       backgroundColor: Colors.white,
       body: FutureBuilder(
@@ -52,24 +56,34 @@ class _DownloadedVideosState extends State<DownloadedVideos> {
               future: getStoredList(),
               builder: (context, videoSnapshot) {
                 if (videoSnapshot.hasData) {
-                  return ListView(
-                    children: List.generate(videoSnapshot.data.length, (index) {
-                      var _parsed = jsonDecode(videoSnapshot.data[index]);
-                      return CourseCard3(
-                          action: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DownloadedVideoPlayer(
-                                          url:
-                                              "${snapshot.data}/${_parsed["video_url"]}",
-                                        )));
-                          },
-                          title: _parsed["video_name"]);
-                    }),
-                  );
+                  if (videoSnapshot.data.length != 0) {
+                    return ListView(
+                      children:
+                          List.generate(videoSnapshot.data.length, (index) {
+                        var _parsed = jsonDecode(videoSnapshot.data[index]);
+                        return CourseCard3(
+                            action: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DownloadedVideoPlayer(
+                                            url:
+                                                "${snapshot.data}/${_parsed["video_url"]}",
+                                          )));
+                            },
+                            title: _parsed["video_name"]);
+                      }),
+                    );
+                  } else {
+                    return Center(
+                      child: Text("No videos downloaded yet."),
+                    );
+                  }
                 } else {
-                  return Container();
+                  return Center(
+                    child: Text("No videos downloaded yet."),
+                  );
                 }
               },
             );

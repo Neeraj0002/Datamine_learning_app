@@ -44,12 +44,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .then((result) {
       if (result != null) {
         Map<String, String> userDataMap = {
-          "userName": "${_fname.text} ${_lname.text}",
-          "userEmail": _username.text,
-          "userId": result.uid,
+          "nickname": "${_fname.text} ${_lname.text}",
+          'email': _username.text,
+          'id': result.uid,
+          'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+          'chattingWith': null
         };
 
-        databaseMethods.addUserInfo(userDataMap);
+        databaseMethods.addUserInfo(userDataMap, result.uid);
         status = "success";
       }
     });
