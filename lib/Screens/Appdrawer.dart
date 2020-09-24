@@ -152,14 +152,14 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           child: Stack(
                             children: [
                               Container(
-                                color: appBarColorlight,
+                                color: Colors.white,
                                 height: 180,
                                 width: constraints.maxWidth,
                               ),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  color: appbarTextColorLight,
+                                  color: Colors.white,
                                   height: 39.4,
                                   width: constraints.maxWidth,
                                 ),
@@ -167,7 +167,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               Align(
                                 alignment: Alignment.topCenter,
                                 child: Image.asset(
-                                  "assets/img/Logo.jpg",
+                                  "assets/img/logo-1.jpg",
                                   height: 170,
                                   fit: BoxFit.contain,
                                 ),
@@ -175,7 +175,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  color: appbarTextColorLight,
+                                  color: Colors.white,
                                   height: 50,
                                   width: constraints.maxWidth,
                                 ),

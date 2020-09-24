@@ -1,3 +1,4 @@
+import 'package:datamine/Components/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +13,7 @@ class _AppCrashedState extends State<AppCrashed> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.blue,
+        systemNavigationBarColor: appBarColorlight,
         systemNavigationBarIconBrightness: Brightness.light));
     super.initState();
   }
@@ -23,7 +24,7 @@ class _AppCrashedState extends State<AppCrashed> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(color: Colors.blue),
+        decoration: BoxDecoration(color: appBarColorlight),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,7 +33,7 @@ class _AppCrashedState extends State<AppCrashed> {
               ": (",
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: "Roboto",
+                fontFamily: "ProximaNova",
                 fontSize: 120,
               ),
             ),
@@ -43,7 +44,7 @@ class _AppCrashedState extends State<AppCrashed> {
               "Our Server is facing some issues\nWe'll be back soon.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white, fontFamily: "Roboto", fontSize: 20),
+                  color: Colors.white, fontFamily: "ProximaNova", fontSize: 20),
             )
           ],
         ),

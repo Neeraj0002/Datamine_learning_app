@@ -26,6 +26,7 @@ import 'package:datamine/constants.dart';
 import 'package:datamine/services/database.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GlobalKey<ScaffoldState> homeKey = GlobalKey<ScaffoldState>();
@@ -152,8 +153,12 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             : Container(),
         title: Text(
-          "DATAMINE",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          "Datamine",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: "ProximaNova",
+              fontWeight: FontWeight.bold),
         ),
         actions: [
           /*userLoggedIn
@@ -387,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       "Trending",
                                       style: TextStyle(
                                         color: Colors.black87,
-                                        fontFamily: "Roboto",
+                                        fontFamily: "ProximaNova",
                                         fontWeight: FontWeight.w800,
                                         fontSize: 20,
                                       ),
@@ -471,33 +476,95 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                 ),
                               ),*/
-                              FutureBuilder(
-                                  future: generalAPI(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        snapshot.hasData) {
-                                      return GeneralItem(
-                                          courses: snapshot.data["data"]
-                                                  ["Courses"]["en-US"]
-                                              .toString(),
-                                          rating: snapshot.data["data"]
-                                                  ["Rating"]["en-US"]
-                                              .toString(),
-                                          reviews: snapshot.data["data"]
-                                                  ["Reviews"]["en-US"]
-                                              .toString(),
-                                          users: snapshot.data["data"]["Users"]
-                                                  ["en-US"]
-                                              .toString());
-                                    } else {
-                                      return GeneralItem(
-                                          courses: "--",
-                                          rating: "--",
-                                          reviews: "--",
-                                          users: "--");
-                                    }
-                                  }),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Achieve your goals with datamine",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: "ProximaNova",
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        MdiIcons.brain,
+                                        color: Colors.black,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Learn the latest skills",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "ProximaNova",
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        MdiIcons.teach,
+                                        color: Colors.black,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Get Ready for a career",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "ProximaNova",
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        MdiIcons.certificate,
+                                        color: Colors.black,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Earn a certificate",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "ProximaNova",
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.people_outline,
+                                        color: Colors.black,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Upskill your organization",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "ProximaNova",
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(

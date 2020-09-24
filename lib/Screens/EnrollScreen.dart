@@ -326,7 +326,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                           "Do you have a coupon code?",
                           style: TextStyle(
                             color: Colors.black54,
-                            fontFamily: "Roboto",
+                            fontFamily: "ProximaNova",
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
@@ -500,7 +500,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                     "Information",
                     style: TextStyle(
                       color: Colors.black54,
-                      fontFamily: "Roboto",
+                      fontFamily: "ProximaNova",
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
                     ),
@@ -519,7 +519,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         "Item price:",
                         style: TextStyle(
                           color: Colors.black38,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -527,7 +527,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         "₹${widget.price}",
                         style: TextStyle(
                           color: Colors.black38,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -543,7 +543,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         "Discount:",
                         style: TextStyle(
                           color: Colors.black38,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -553,7 +553,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                           color: offerPercentage > 0
                               ? Colors.green
                               : Colors.black38,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -569,7 +569,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         "Total:",
                         style: TextStyle(
                           color: Colors.black87,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -577,7 +577,7 @@ class _EnrollScreenState extends State<EnrollScreen> {
                         "₹${total.toStringAsFixed(1)}",
                         style: TextStyle(
                           color: Colors.green,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),

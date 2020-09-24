@@ -102,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
                           child: Image.asset(
-                            "assets/img/Logo.jpg",
+                            "assets/img/logo-1.jpg",
                             height: 100,
                           ),
                         ),

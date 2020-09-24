@@ -61,7 +61,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Learn anywhere",
           body: "with datamine ",
-          image: _buildImage('Logo.jpg'),
+          image: _buildImage('no-bg.png'),
           decoration: PageDecoration(
             titleTextStyle: TextStyle(
                 fontSize: 28.0,
@@ -77,7 +77,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Upgrade You Skills",
           body: "with datamine",
-          image: _buildImage('Logo.jpg'),
+          image: _buildImage('no-bg.png'),
           decoration: PageDecoration(
             titleTextStyle: TextStyle(
                 fontSize: 28.0,
@@ -93,7 +93,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Learn at your will",
           body: "Lifetime access to courses",
-          image: _buildImage('Logo.jpg'),
+          image: _buildImage('no-bg.png'),
           decoration: PageDecoration(
             titleTextStyle: TextStyle(
                 fontSize: 28.0,

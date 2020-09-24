@@ -43,8 +43,8 @@ class _DownloadedVideosState extends State<DownloadedVideos> {
         centerTitle: true,
         backgroundColor: appBarColorlight,
         title: Text(
-          "DATAMINE",
-          style: TextStyle(color: Colors.white),
+          "Datamine",
+          style: TextStyle(color: Colors.white, fontFamily: "ProximaNova"),
         ),
       ),
       backgroundColor: Colors.white,
@@ -136,7 +136,7 @@ class _DownloadedVideoPlayerState extends State<DownloadedVideoPlayer> {
                           Shadow(color: Colors.black26, offset: Offset(1, 1))
                         ],
                         color: Colors.white.withOpacity(0.8),
-                        fontFamily: "Roboto",
+                        fontFamily: "ProximaNova",
                         fontSize: 12),
                   ),
                 ),

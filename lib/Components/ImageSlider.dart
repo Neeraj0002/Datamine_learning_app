@@ -53,7 +53,8 @@ class _ImageSliderState extends State<ImageSlider> {
                   margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _current == index ? Colors.lightBlue : Colors.white,
+                    color:
+                        _current == index ? appbarTextColorLight : Colors.white,
                   ),
                 );
               }).toList(),

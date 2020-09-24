@@ -86,7 +86,7 @@ class CourseCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: Colors.black54,
-                                fontFamily: "Roboto",
+                                fontFamily: "ProximaNova",
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -99,7 +99,7 @@ class CourseCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: appBarColorlight,
-                                fontFamily: "Roboto",
+                                fontFamily: "ProximaNova",
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -211,7 +211,7 @@ class CourseCard2 extends StatelessWidget {
                             maxLines: 2,
                             style: TextStyle(
                                 color: Colors.black54,
-                                fontFamily: "Roboto",
+                                fontFamily: "ProximaNova",
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -225,7 +225,7 @@ class CourseCard2 extends StatelessWidget {
                             maxLines: 2,
                             style: TextStyle(
                               color: appBarColorlight,
-                              fontFamily: "Roboto",
+                              fontFamily: "ProximaNova",
                               fontSize: 14,
                             ),
                           ),
@@ -283,7 +283,7 @@ class CourseCard3 extends StatelessWidget {
                     maxLines: 2,
                     style: TextStyle(
                         color: appBarColorlight,
-                        fontFamily: "Roboto",
+                        fontFamily: "ProximaNova",
                         fontSize: 15,
                         fontWeight: FontWeight.w600),
                   ),

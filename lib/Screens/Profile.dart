@@ -217,7 +217,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           child: ClipOval(
                               child: Image.asset(
-                            "assets/img/Logo.jpg",
+                            "assets/img/logo-1.jpg",
                             fit: BoxFit.contain,
                           )),
                         ),

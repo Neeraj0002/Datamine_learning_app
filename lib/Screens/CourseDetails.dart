@@ -64,13 +64,14 @@ class _CourseDetailsState extends State<CourseDetails> {
 
   @override
   void initState() {
+    userData = getUserData();
     if (widget.demoVideo != null) {
       videoPlayerController = VideoPlayerController.network(widget.demoVideo);
       chewieController = ChewieController(
           videoPlayerController: videoPlayerController,
           aspectRatio: 16 / 9,
-          autoPlay: true,
-          looping: true,
+          autoPlay: false,
+          looping: false,
           deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
           fullScreenByDefault: false,
           materialProgressColors: ChewieProgressColors(
@@ -101,28 +102,7 @@ class _CourseDetailsState extends State<CourseDetails> {
               fit: BoxFit.fill,
             );
           },
-          placeholder: CachedNetworkImage(
-            imageUrl: widget.imgUrl,
-            errorWidget: (context, url, error) {
-              return Center(
-                child: Icon(
-                  Icons.error,
-                  color: Colors.red,
-                ),
-              );
-            },
-            progressIndicatorBuilder: (context, url, progress) {
-              return Center(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(appBarColorlight),
-                  ),
-                ),
-              );
-            },
-            fit: BoxFit.fill,
-          ),
+          placeholder: Container(),
           overlay: Container(
             child: Stack(
               children: [
@@ -146,213 +126,8 @@ class _CourseDetailsState extends State<CourseDetails> {
             ),
           ));
     }
-    userData = getUserData();
-    /*_razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);*/
-
     super.initState();
   }
-
-  /*_handlePaymentSuccess(PaymentSuccessResponse response) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        child: AlertDialog(
-          content: Container(
-            height: 80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(appBarColorlight),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
-    purchaseAPI(context, widget.courseName, "razorpay").then((value) {
-      Navigator.of(context).pop();
-      if (value == 200) {
-        Navigator.of(context).pop();
-        homeKey.currentState.showSnackBar(SnackBar(
-          backgroundColor: Colors.green,
-          content: Text(
-            "Payment Succesful",
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: "ProximaNova",
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-          ),
-        ));
-      } else {
-        showDialog(
-            context: context,
-            child: AlertDialog(
-              backgroundColor: Colors.red,
-              title: Text(
-                "Failed",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-              content: Text(
-                "Please try again later, sorry for the inconvenince.\nIf the money has been deducted it will be credited back to your account in two working days.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "OK",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "ProximaNova",
-                    ),
-                  ),
-                )
-              ],
-            ));
-      }
-    });
-  }
-
-  _handlePaymentError(PaymentFailureResponse response) {
-    showDialog(
-        context: context,
-        child: AlertDialog(
-          backgroundColor: Colors.red,
-          title: Text(
-            "Failed",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: "ProximaNova",
-            ),
-          ),
-          content: Text(
-            "Please try again later, sorry for the inconvenince.\nIf the money has been deducted it will be credited back to your account in two working days.",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontFamily: "ProximaNova",
-            ),
-          ),
-          actions: [
-            FlatButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                "OK",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-            )
-          ],
-        ));
-  }
-
-  _handleExternalWallet(ExternalWalletResponse response) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        child: AlertDialog(
-          content: Container(
-            height: 80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(appBarColorlight),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
-    purchaseAPI(context, widget.courseName, "razorpay").then((value) {
-      Navigator.of(context).pop();
-      if (value == 200) {
-        Navigator.of(context).pop();
-        homeKey.currentState.showSnackBar(SnackBar(
-          backgroundColor: Colors.green,
-          content: Text(
-            "Payment Succesful",
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: "ProximaNova",
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-          ),
-        ));
-      } else {
-        showDialog(
-            context: context,
-            child: AlertDialog(
-              backgroundColor: Colors.red,
-              title: Text(
-                "Failed",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-              content: Text(
-                "Please try again later, sorry for the inconvenince.\nIf the money has been deducted it will be credited back to your account in two working days.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "OK",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "ProximaNova",
-                    ),
-                  ),
-                )
-              ],
-            ));
-      }
-    });
-  }*/
 
   @override
   void dispose() {
@@ -363,23 +138,6 @@ class _CourseDetailsState extends State<CourseDetails> {
       chewieController.dispose();
     }
   }
-
-  /*// ignore: unused_element
-  _openCheckout() async {
-    var options = {
-      'key': 'rzp_live_PomMEWubUYJHJt',
-      'amount': widget.price * 100,
-      'name': 'Acme Corp.',
-      'description': widget.courseName,
-      'prefill': {'contact': "${userData["phone"]}", 'email': userData["mail"]}
-    };
-
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      print(e);
-    }
-  }*/
 
   Future getCoupons(BuildContext context) async {
     showDialog(
@@ -437,109 +195,39 @@ class _CourseDetailsState extends State<CourseDetails> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      /*bottomSheet: Container(
-        height: 70,
-        width: screenWidth,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
-          child: customButton(
-              action: () {
-                chewieController.pause();
-                loggedIn
-                    ? getCoupons(context)
-                    : showDialog(
-                        context: context,
-                        child: AlertDialog(
-                          title: Text(
-                            "Login",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "ProximaNova",
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          content: Text(
-                            "Please login to buy this course",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: "ProximaNova",
-                              fontSize: 14,
-                            ),
-                          ),
-                          actions: [
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            BottomNaviBar(indexNo: 2),
-                                        settings: RouteSettings(
-                                            name: "/homwScreen")));
-                              },
-                              child: Text(
-                                "Login Now",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                            FlatButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text(
-                                "OK",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            )
-                          ],
-                        ));
-              },
-              color: appBarColorlight,
-              text: "Buy Course"),
-        ),
-      ),*/
       body: Stack(
         children: [
           Column(
             children: [
-              /*widget.demoVideo != null
-                  ? */
-              Chewie(
-                controller: chewieController,
+              Container(
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: widget.imgUrl,
+                  errorWidget: (context, url, error) {
+                    return Center(
+                      child: Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                    );
+                  },
+                  progressIndicatorBuilder: (context, url, progress) {
+                    return Center(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                              appBarColorlight),
+                        ),
+                      ),
+                    );
+                  },
+                  fit: BoxFit.fill,
+                ),
               ),
-              /*: Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.imgUrl,
-                        errorWidget: (context, url, error) {
-                          return Center(
-                            child: Icon(
-                              Icons.error,
-                              color: Colors.red,
-                            ),
-                          );
-                        },
-                        progressIndicatorBuilder: (context, url, progress) {
-                          return Center(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                valueColor: new AlwaysStoppedAnimation<Color>(
-                                    appBarColorlight),
-                              ),
-                            ),
-                          );
-                        },
-                        fit: BoxFit.fill,
-                      ),
-                    ),*/
               Container(
                 height: 70,
                 width: screenWidth,
@@ -612,7 +300,7 @@ class _CourseDetailsState extends State<CourseDetails> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: screenHeight - 370,
+              height: screenHeight - 360,
               child: ListView(
                 physics: ScrollPhysics(),
                 shrinkWrap: true,
@@ -752,6 +440,23 @@ class _CourseDetailsState extends State<CourseDetails> {
                             ),
                           ),
                         ),
+                      ),
+                      Container(
+                        height: 0,
+                        width: 0,
+                        child: Chewie(
+                          controller: chewieController,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: VideoListItem(
+                            action: () {
+                              print("TOGGLE FULL SCREEN");
+                              chewieController.toggleFullScreen();
+                            },
+                            icon: Icons.play_arrow,
+                            title: "Demo Video"),
                       )
                     ],
                   ),
@@ -769,45 +474,19 @@ class _CourseDetailsState extends State<CourseDetails> {
 }
 
 // ignore: must_be_immutable
-class VideoList extends StatefulWidget {
-  _CourseDetailsState parent;
-  VideoList({@required this.parent});
-  @override
-  _VideoListState createState() => _VideoListState();
-}
-
-class _VideoListState extends State<VideoList> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(5, (index) {
-        return VideoListItem(
-            action: () {},
-            duration: "00:07",
-            icon: (index == 2 || index == 3) ? MdiIcons.lock : MdiIcons.play,
-            title: "<Video title goes here>");
-      }),
-    );
-  }
-}
-
-// ignore: must_be_immutable
 class VideoListItem extends StatelessWidget {
   Function action;
   var icon;
   String title;
-  String duration;
   VideoListItem(
-      {@required this.action,
-      @required this.duration,
-      @required this.icon,
-      @required this.title});
+      {@required this.action, @required this.icon, @required this.title});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: action,
       child: Container(
-        color: Colors.transparent,
+        decoration: BoxDecoration(
+            color: appBarColorlight, borderRadius: BorderRadius.circular(5)),
         height: 60,
         width: MediaQuery.of(context).size.width,
         child: Padding(
@@ -821,7 +500,7 @@ class VideoListItem extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     SizedBox(
                       width: 10,
@@ -833,7 +512,7 @@ class VideoListItem extends StatelessWidget {
                         overflow: TextOverflow.fade,
                         maxLines: 1,
                         style: TextStyle(
-                          color: Colors.black54,
+                          color: Colors.white,
                           fontFamily: "Roboto",
                           fontSize: 14,
                         ),
@@ -841,16 +520,7 @@ class VideoListItem extends StatelessWidget {
                     )
                   ],
                 ),
-                Text(
-                  duration,
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontFamily: "Roboto",
-                    fontSize: 14,
-                  ),
-                )
+                Container()
               ],
             );
           }),

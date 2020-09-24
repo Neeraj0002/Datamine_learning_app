@@ -75,7 +75,7 @@ class _QuizScreenState extends State<QuizScreen> {
             child: AlertDialog(
               backgroundColor: Colors.white,
               content: Text(
-                "You haven't submitted the quiz. Are you sure that you want to exit?",
+                "You haven't submitted the test. Are you sure that you want to exit?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -117,7 +117,7 @@ class _QuizScreenState extends State<QuizScreen> {
       child: Scaffold(
           appBar: AppBar(
             title: Text(
-              'Quiz 1',
+              'Test 1',
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,
@@ -280,7 +280,7 @@ class _QuizScreenState extends State<QuizScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(40, 16, 40, 16),
               child: customButton(
-                  action: () {}, color: appBarColorlight, text: "Submit Quiz"),
+                  action: () {}, color: appBarColorlight, text: "Submit"),
             )
           ])),
     );

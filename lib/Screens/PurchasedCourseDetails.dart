@@ -78,7 +78,7 @@ class _PurchasedCourseDetailsState extends State<PurchasedCourseDetails> {
                   text: "Videos",
                 ),
                 Tab(
-                  text: "Quiz",
+                  text: "Test",
                 )
               ],
             ),
@@ -142,7 +142,7 @@ class _Screen1State extends State<Screen1> {
                           Shadow(color: Colors.black26, offset: Offset(1, 1))
                         ],
                         color: Colors.white.withOpacity(0.8),
-                        fontFamily: "Roboto",
+                        fontFamily: "ProximaNova",
                         fontSize: 12),
                   ),
                 ),
@@ -185,14 +185,14 @@ class _Screen1State extends State<Screen1> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.black87,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                  Container(
+                  /*Container(
                     width: screenWidth,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,7 +210,7 @@ class _Screen1State extends State<Screen1> {
                                     " ${_data[0]["StartDate"]["en-US"].toString().substring(0, 10)} ${_data[0]["StartDate"]["en-US"].toString().substring(11)}",
                                     style: TextStyle(
                                       color: Colors.grey,
-                                      fontFamily: "Roboto",
+                                      fontFamily: "ProximaNova",
                                       fontSize: 14,
                                     ),
                                   ),
@@ -231,7 +231,7 @@ class _Screen1State extends State<Screen1> {
                                     " ${_data[0]["EndDate"]["en-US"].toString().substring(0, 10)} ${_data[0]["EndDate"]["en-US"].toString().substring(11)}",
                                     style: TextStyle(
                                       color: Colors.grey,
-                                      fontFamily: "Roboto",
+                                      fontFamily: "ProximaNova",
                                       fontSize: 14,
                                     ),
                                   ),
@@ -240,7 +240,7 @@ class _Screen1State extends State<Screen1> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -264,7 +264,7 @@ class _Screen1State extends State<Screen1> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black87,
-                        fontFamily: "Roboto",
+                        fontFamily: "ProximaNova",
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -311,7 +311,7 @@ class _Screen1State extends State<Screen1> {
                                                   ],
                                                   color: Colors.white
                                                       .withOpacity(0.8),
-                                                  fontFamily: "Roboto",
+                                                  fontFamily: "ProximaNova",
                                                   fontSize: 12),
                                             ),
                                           ),
@@ -385,7 +385,7 @@ class VideoListItem extends StatelessWidget {
                         maxLines: 1,
                         style: TextStyle(
                           color: active ? Colors.white : Colors.black54,
-                          fontFamily: "Roboto",
+                          fontFamily: "ProximaNova",
                           fontSize: 14,
                         ),
                       ),
@@ -398,7 +398,7 @@ class VideoListItem extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: active ? Colors.white : Colors.black45,
-                    fontFamily: "Roboto",
+                    fontFamily: "ProximaNova",
                     fontSize: 14,
                   ),
                 )
@@ -466,7 +466,7 @@ class _Screen2State extends State<Screen2> {
                     },
                     child: Center(
                       child: Text(
-                        "Quiz ${index + 1}",
+                        "Test ${index + 1}",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.black87,

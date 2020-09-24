@@ -198,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: splashScreenColor1,
         statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: splashScreenColor2,
+        systemNavigationBarColor: Colors.white,
         systemNavigationBarIconBrightness: Brightness.dark));
     chechId();
     super.initState();
@@ -211,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Column(
+          /*Column(
             children: [
               Container(
                 height: MediaQuery.of(context).size.height / 2,
@@ -224,12 +224,34 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: splashScreenColor2,
               ),
             ],
+          ),*/
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: screenWidth,
+            color: Colors.white,
           ),
-          Center(
-            child: Image.asset(
-              "assets/img/Logo.jpg",
-              width: screenWidth,
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Image.asset(
+                  "assets/img/no-bg.png",
+                  width: screenWidth,
+                ),
+              ),
+              Center(
+                child: Text(
+                  "Datamine",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: "ProximaNova",
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
