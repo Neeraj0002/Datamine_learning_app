@@ -5,7 +5,7 @@ import 'package:datamine/API/apiConfig.dart';
 Future resourceAPI(String courseName, String batchNo) async {
   print(courseName);
   print(batchNo);
-  final url = "$mainUrl/resource/${courseName.toLowerCase()}/$batchNo";
+  final url = "$mainUrl/resource/${courseName.toLowerCase()}/1";
 
   Response result;
   result = await get(url);

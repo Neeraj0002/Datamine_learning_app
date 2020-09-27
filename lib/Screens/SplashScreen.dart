@@ -237,7 +237,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Center(
                 child: Image.asset(
                   "assets/img/no-bg.png",
-                  width: screenWidth,
+                  width: screenWidth * (0.7),
                 ),
               ),
               Center(
@@ -253,7 +253,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ],
           ),
-          Align(
+          /*Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               //color: Colors.red,
@@ -283,7 +283,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ],
               ),
             ),
-          )
+          )*/
         ],
       ),
     );

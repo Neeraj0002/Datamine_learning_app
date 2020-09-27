@@ -806,6 +806,7 @@ class _Screen2State extends State<Screen2> {
   @override
   void initState() {
     _sortList();
+
     super.initState();
   }
 
@@ -827,9 +828,7 @@ class _Screen2State extends State<Screen2> {
                     onTap: () {
                       Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (_, __, ___) => QuizScreen(
-                          question: _sortedList[index]["Questions"]["en-US"],
-                          answers: _sortedList[index]["Answers"]["en-US"],
-                          options: _sortedList[index]["Options"]["en-US"],
+                          question: _sortedList[index]["Problems"]["en-US"],
                         ),
                       ));
                     },

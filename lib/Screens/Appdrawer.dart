@@ -346,8 +346,8 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                       Navigator.pop(context);
                       final RenderBox box = context.findRenderObject();
                       Share.text(
-                          "Download Yourguru now",
-                          "Download Yourguru from the playstore now, follow this link\n https://google.com",
+                          "Download Datamine now",
+                          "Download Datamine from the playstore now, follow this link\n https://google.com",
                           "text/plain");
                     },
                     title: Text(
@@ -516,7 +516,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                           ),
                         ),
                       ),
-                      Align(
+                      /*Align(
                         alignment: Alignment.bottomCenter,
                         child: InkWell(
                           onTap: () async {
@@ -553,7 +553,7 @@ class _CustomAppDrawerState extends State<CustomAppDrawer> {
                             ),
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ],

@@ -383,99 +383,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ["courses"],
                                     title: "Trending")
                               ]),
-                              /*Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20.0, left: 8.0, bottom: 8),
-                                    child: Text(
-                                      "Trending",
-                                      style: TextStyle(
-                                        color: Colors.black87,
-                                        fontFamily: "ProximaNova",
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Container(
-                                height: 200,
-                                width: MediaQuery.of(context).size.width,
-                                child: Swiper(
-                                  itemCount: snapshot
-                                      .data["data"]["Trending"]["courses"]
-                                      .length,
-                                  autoplay: true,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          settings: RouteSettings(
-                                            name: "/mentorProfile",
-                                          ),
-                                          builder: (context) => CourseDetails(
-                                            outcome: snapshot.data["data"]
-                                                    ["Trending"]["courses"]
-                                                [index]["Outcome"]["en-US"],
-                                            demoVideo: snapshot.data["data"]
-                                                                ["Trending"]
-                                                            ["courses"][index]
-                                                        ["Demo"] !=
-                                                    null
-                                                ? snapshot.data["data"]
-                                                        ["Trending"]["courses"]
-                                                    [index]["Demo"]["en-US"]
-                                                : null,
-                                            courseName: snapshot.data["data"]
-                                                    ["Trending"]["courses"]
-                                                [index]["Title"]["en-US"],
-                                            price: int.parse(
-                                                snapshot.data["data"]
-                                                        ["Trending"]["courses"]
-                                                    [index]["Price"]["en-US"]),
-                                            imgUrl: snapshot.data["data"]
-                                                    ["Trending"]["courses"]
-                                                [index]["Thumbnail"]["en-US"],
-                                            desc: snapshot.data["data"]
-                                                    ["Trending"]["courses"]
-                                                [index]["Details"]["en-US"],
-                                          ),
-                                        ));
-                                      },
-                                      child: CachedNetworkImage(
-                                        imageUrl: snapshot.data["data"]
-                                                ["Trending"]["courses"][index]
-                                            ["Thumbnail"]["en-US"],
-                                        errorWidget: (context, url, error) {
-                                          return Center(
-                                            child: Icon(
-                                              Icons.error,
-                                              color: Colors.red,
-                                            ),
-                                          );
-                                        },
-                                        progressIndicatorBuilder:
-                                            (context, url, progress) {
-                                          return Center(
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                valueColor:
-                                                    new AlwaysStoppedAnimation<
-                                                            Color>(
-                                                        appBarColorlight),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),*/
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -565,6 +472,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
+                              FutureBuilder(
+                                  future: generalAPI(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      return GeneralItem(
+                                          courses: snapshot.data["data"]
+                                                  ["Courses"]["en-US"]
+                                              .toString(),
+                                          rating: snapshot.data["data"]
+                                                  ["Rating"]["en-US"]
+                                              .toString(),
+                                          reviews: snapshot.data["data"]
+                                                  ["Reviews"]["en-US"]
+                                              .toString(),
+                                          users: snapshot.data["data"]["Users"]
+                                                  ["en-US"]
+                                              .toString());
+                                    } else {
+                                      return GeneralItem(
+                                          courses: "--",
+                                          rating: "--",
+                                          reviews: "--",
+                                          users: "--");
+                                    }
+                                  }),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(

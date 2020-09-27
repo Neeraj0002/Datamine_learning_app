@@ -178,10 +178,97 @@ class _CourseDetailsState extends State<CourseDetails> {
     });
   }
 
+  buyFreeCourse() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        child: AlertDialog(
+          content: Container(
+            height: 80,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(appBarColorlight),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
+    purchaseAPI(context, widget.courseName, "razorpay").then((value) {
+      Navigator.of(context).pop();
+      if (value == 200) {
+        Navigator.of(context).pop();
+        homeKey.currentState.showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            "Course Purchased",
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: "ProximaNova",
+                fontWeight: FontWeight.bold,
+                fontSize: 18),
+          ),
+        ));
+      } else {
+        showDialog(
+            context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.red,
+              title: Text(
+                "Failed",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "ProximaNova",
+                ),
+              ),
+              content: Text(
+                "Please try again later, sorry for the inconvenince.\nIf the money has been deducted it will be credited back to your account in two working days.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontFamily: "ProximaNova",
+                ),
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "OK",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "ProximaNova",
+                    ),
+                  ),
+                )
+              ],
+            ));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    chewieController.addListener(() {
+      if (chewieController.isFullScreen) {
+        chewieController.play();
+      } else {
+        chewieController.pause();
+      }
+    });
     return Scaffold(
       key: courseDetailKey,
       backgroundColor: Colors.white,
@@ -238,7 +325,10 @@ class _CourseDetailsState extends State<CourseDetails> {
                       action: () {
                         chewieController.pause();
                         loggedIn
-                            ? getCoupons(context)
+                            // ignore: unnecessary_statements
+                            ? (widget.price == 0
+                                ? buyFreeCourse()
+                                : getCoupons(context))
                             : showDialog(
                                 context: context,
                                 child: AlertDialog(
@@ -452,8 +542,38 @@ class _CourseDetailsState extends State<CourseDetails> {
                         padding: const EdgeInsets.all(8.0),
                         child: VideoListItem(
                             action: () {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  child: AlertDialog(
+                                    content: Container(
+                                      height: 80,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    new AlwaysStoppedAnimation<
+                                                            Color>(
+                                                        appBarColorlight),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
                               print("TOGGLE FULL SCREEN");
-                              chewieController.toggleFullScreen();
+                              videoPlayerController.initialize().then((value) {
+                                Navigator.pop(context);
+                                chewieController.toggleFullScreen();
+                                //chewieController.play();
+                              });
                             },
                             icon: Icons.play_arrow,
                             title: "Demo Video"),

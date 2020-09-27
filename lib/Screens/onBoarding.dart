@@ -20,7 +20,7 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
-
+  var indicatorColor = Colors.black;
   void _onIntroEnd(context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -61,20 +61,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Learn anywhere",
           body: "with datamine ",
-          image: _buildImage('no-bg.png'),
+          image: _buildImage('onboarding.png'),
           decoration: PageDecoration(
             titleTextStyle: TextStyle(
                 fontSize: 28.0,
                 fontWeight: FontWeight.w700,
-                color: Colors.white),
-            bodyTextStyle:
-                TextStyle(fontSize: 19.0, color: appbarTextColorLight),
+                color: Colors.black),
+            bodyTextStyle: TextStyle(fontSize: 19.0, color: appBarColorlight),
             descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            pageColor: appBarColorlight,
+            pageColor: Colors.white,
             imagePadding: EdgeInsets.zero,
           ),
         ),
-        PageViewModel(
+        /*PageViewModel(
           title: "Upgrade You Skills",
           body: "with datamine",
           image: _buildImage('no-bg.png'),
@@ -105,7 +104,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             pageColor: appBarColorlight,
             imagePadding: EdgeInsets.zero,
           ),
-        ),
+        ),*/
       ],
       onDone: () => _onIntroEnd(context),
       onSkip: () {
@@ -113,26 +112,35 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           MaterialPageRoute(builder: (_) => BottomNaviBar(indexNo: 0)),
         );
       }, // You can override onSkip callback
+      onChange: (index) {
+        setState(() {
+          if (index == 0) {
+            indicatorColor = Colors.black;
+          } else {
+            indicatorColor = Colors.white;
+          }
+        });
+      },
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
       showNextButton: true,
 
-      skip: const Text(
+      skip: Text(
         'Browse',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: indicatorColor),
       ),
-      next: const Icon(
+      next: Icon(
         Icons.arrow_forward,
-        color: Colors.white,
+        color: indicatorColor,
       ),
-      done: const Text('Login',
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-      dotsDecorator: const DotsDecorator(
-        size: Size(10.0, 10.0),
-        color: Colors.white54,
-        activeSize: Size(22.0, 10.0),
-        activeColor: Colors.white,
+      done: Text('Login',
+          style: TextStyle(fontWeight: FontWeight.w600, color: indicatorColor)),
+      dotsDecorator: DotsDecorator(
+        size: Size(0.0, 0.0),
+        color: Colors.black38,
+        activeSize: Size(0.0, 0.0),
+        activeColor: indicatorColor,
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),

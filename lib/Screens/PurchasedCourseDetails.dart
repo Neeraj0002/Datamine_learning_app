@@ -1,4 +1,4 @@
-import 'package:chewie/chewie.dart';
+/*import 'package:chewie/chewie.dart';
 import 'package:datamine/Components/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -428,7 +428,7 @@ class _Screen2State extends State<Screen2> {
     for (int i = 0; i < _data.length; i++) {
       print(widget.currentCourse);
 
-      if (_data[i]["Course"]["en-US"] == widget.currentCourse) {
+      if (_data[i]["Course"]["en-US"].toLowerCase() == widget.currentCourse) {
         _sortedList.add(_data[i]);
       }
     }
@@ -442,8 +442,9 @@ class _Screen2State extends State<Screen2> {
 
   @override
   Widget build(BuildContext context) {
-    return _sortedList.length != 0
-        ? ListView.builder(
+    return /*_sortedList.length != 0
+        ? */
+        ListView.builder(
             itemCount: _sortedList.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -479,8 +480,10 @@ class _Screen2State extends State<Screen2> {
                 ),
               );
             })
-        : Center(
+        /*: Center(
             child: Text("No test available"),
-          );
+          )*/
+        ;
   }
 }
+*/

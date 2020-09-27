@@ -5,8 +5,6 @@ import 'package:datamine/Components/colors.dart';
 import 'package:datamine/Screens/BottomNaviBar.dart';
 import 'package:datamine/Screens/ChatUser.dart';
 import 'package:datamine/Screens/PurchasedCourseDetailWithDownload.dart';
-import 'package:datamine/Screens/PurchasedCourseDetails.dart';
-import 'package:datamine/Screens/chatrooms.dart';
 import 'package:datamine/constants.dart';
 import 'package:datamine/services/database.dart';
 import 'package:flutter/material.dart';

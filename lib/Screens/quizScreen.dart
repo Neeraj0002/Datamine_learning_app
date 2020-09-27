@@ -1,67 +1,72 @@
 import 'package:datamine/Components/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:datamine/Components/customButtons.dart';
+import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class QuizScreen extends StatefulWidget {
   List question;
-  List answers;
-  List options;
-  QuizScreen(
-      {@required this.answers,
-      @required this.options,
-      @required this.question});
+  QuizScreen({@required this.question});
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  List sortedAns = List();
-  Map selectedAnsList = Map();
+  List answers;
+  bool evaluated = false;
   List colorList = List();
-
-  sortAnswer() {
-    List subList;
-    for (int i = 0; i <= 6; i++) {
-      print("i = $i");
-      if (i % 3 == 0) {
-        subList = List();
-        for (int j = i; j < i + 3; j++) {
-          print("i=$i j = $j");
-          subList.add(widget.options[j]);
-        }
-        sortedAns.add(subList);
-      }
-    }
-    print(sortedAns);
-  }
-
-  setAnsList() {
-    for (int i = 0; i < widget.question.length; i++) {
-      selectedAnsList[widget.question[i]] = "";
-    }
-  }
-
+  int score = 0;
+  List correctAns;
   setColorList() {
     List subList;
-    for (int i = 0; i <= 6; i++) {
-      print("i = $i");
-      if (i % 3 == 0) {
-        subList = List();
-        for (int j = i; j < i + 3; j++) {
-          print("i=$i j = $j");
-          subList.add(appBarColorlight);
+    colorList = List();
+    for (int i = 0; i < widget.question.length; i++) {
+      subList = List();
+      for (int j = 0; j < widget.question[i]['option'].length; j++) {
+        subList.add(appBarColorlight);
+      }
+      colorList.add(subList);
+    }
+  }
+
+  setCorectAnsColorList() {
+    for (int i = 0; i < widget.question.length; i++) {
+      for (int j = 0; j < widget.question[i]['option'].length; j++) {
+        if (widget.question[i]['option'][j] == correctAns[i]) {
+          setState(() {
+            colorList[i][j] = Colors.green;
+          });
         }
-        colorList.add(subList);
       }
     }
-    print(sortedAns);
+  }
+
+  setAnswerList() {
+    answers = List();
+    for (int i = 0; i < widget.question.length; i++) {
+      answers.add("");
+    }
+  }
+
+  setCorrectAns() {
+    correctAns = List();
+    for (int i = 0; i < widget.question.length; i++) {
+      correctAns.add(widget.question[i]["answer"]);
+    }
+  }
+
+  calculateScore() {
+    for (int i = 0; i < widget.question.length; i++) {
+      if (answers[i] == correctAns[i]) {
+        score++;
+      }
+    }
   }
 
   @override
   void initState() {
-    sortAnswer();
-    setAnsList();
     setColorList();
+    setAnswerList();
+    setCorrectAns();
     super.initState();
   }
 
@@ -70,61 +75,65 @@ class _QuizScreenState extends State<QuizScreen> {
     return WillPopScope(
       // ignore: missing_return
       onWillPop: () {
-        showDialog(
-            context: context,
-            child: AlertDialog(
-              backgroundColor: Colors.white,
-              content: Text(
-                "You haven't submitted the test. Are you sure that you want to exit?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: "ProximaNova",
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "No",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "ProximaNova",
-                    ),
+        if (evaluated == false) {
+          showDialog(
+              context: context,
+              child: AlertDialog(
+                backgroundColor: Colors.white,
+                content: Text(
+                  "You haven't submitted the quiz. Are you sure that you want to exit?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: "ProximaNova",
                   ),
                 ),
-                FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Yes",
-                    style: TextStyle(
-                      color: appBarColorlight,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "ProximaNova",
+                actions: [
+                  FlatButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      "No",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "ProximaNova",
+                      ),
                     ),
                   ),
-                )
-              ],
-            ));
+                  FlatButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Yes",
+                      style: TextStyle(
+                        color: appBarColorlight,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "ProximaNova",
+                      ),
+                    ),
+                  )
+                ],
+              ));
+        } else {
+          Navigator.pop(context);
+        }
       },
       child: Scaffold(
           appBar: AppBar(
             title: Text(
-              'Test 1',
+              'Quiz 1',
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,
             backgroundColor: appBarColorlight,
             iconTheme: IconThemeData(color: Colors.white),
           ),
-          body: ListView(children: <Widget>[
+          body: ListView(shrinkWrap: true, children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -136,7 +145,7 @@ class _QuizScreenState extends State<QuizScreen> {
               padding: EdgeInsets.all(8.0),
             ),
             Column(
-              children: List.generate(3, (index) {
+              children: List.generate(widget.question.length, (index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Stack(
@@ -162,7 +171,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 35, 8, 8),
                                 child: Text(
-                                  "${widget.question[index]}",
+                                  "${widget.question[index]['question']}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black,
@@ -186,28 +195,35 @@ class _QuizScreenState extends State<QuizScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: Column(
-                                  children: List.generate(sortedAns.length,
+                                  children: List.generate(
+                                      widget.question[index]['option'].length,
                                       (mcqIndex) {
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            for (int i = 0; i < 3; i++) {
-                                              if (i == mcqIndex) {
-                                                colorList[index][i] =
-                                                    Colors.black;
-                                              } else {
-                                                colorList[index][i] =
-                                                    appBarColorlight;
+                                          if (evaluated == false) {
+                                            setState(() {
+                                              for (int i = 0;
+                                                  i <
+                                                      widget
+                                                          .question[index]
+                                                              ['option']
+                                                          .length;
+                                                  i++) {
+                                                if (i == mcqIndex) {
+                                                  answers[index] =
+                                                      widget.question[index]
+                                                          ['option'][i];
+                                                  colorList[index][i] =
+                                                      Colors.black;
+                                                } else {
+                                                  colorList[index][i] =
+                                                      appBarColorlight;
+                                                }
                                               }
-                                            }
-                                          });
-
-                                          selectedAnsList[
-                                                  widget.question[index]] =
-                                              widget.options[mcqIndex];
-                                          print(selectedAnsList);
+                                            });
+                                          }
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -225,7 +241,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                   const EdgeInsets.fromLTRB(
                                                       16.0, 8, 16, 8),
                                               child: Text(
-                                                "${sortedAns[index][mcqIndex]}",
+                                                "${widget.question[index]['option'][mcqIndex]}",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14,
@@ -277,10 +293,52 @@ class _QuizScreenState extends State<QuizScreen> {
                 );
               }),
             ),
+            evaluated
+                ? Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: score <= 0 ? Colors.red : Colors.green,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12,
+                                spreadRadius: 1,
+                                blurRadius: 2),
+                          ],
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Score: $score",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto"),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Padding(
               padding: const EdgeInsets.fromLTRB(40, 16, 40, 16),
               child: customButton(
-                  action: () {}, color: appBarColorlight, text: "Submit"),
+                  action: () {
+                    if (evaluated == false) {
+                      setCorectAnsColorList();
+                      calculateScore();
+                      setState(() {
+                        evaluated = true;
+                      });
+                    }
+                  },
+                  color: appBarColorlight,
+                  text: "Submit Quiz"),
             )
           ])),
     );
