@@ -321,44 +321,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (imageSnapshot.connectionState ==
                                           ConnectionState.done &&
                                       imageSnapshot.hasData) {
-                                    /*return Container(
-                                      height: 200,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Swiper(
-                                        itemCount: imageSnapshot
-                                            .data["data"]["images"].length,
-                                        autoplay: true,
-                                        itemBuilder: (context, index) {
-                                          return CachedNetworkImage(
-                                            imageUrl: imageSnapshot.data["data"]
-                                                ["images"][index],
-                                            errorWidget: (context, url, error) {
-                                              return Center(
-                                                child: Icon(
-                                                  Icons.error,
-                                                  color: Colors.red,
-                                                ),
-                                              );
-                                            },
-                                            progressIndicatorBuilder:
-                                                (context, url, progress) {
-                                              return Center(
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    valueColor:
-                                                        new AlwaysStoppedAnimation<
-                                                                Color>(
-                                                            appBarColorlight),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            fit: BoxFit.cover,
-                                          );
-                                        },
-                                      ),
-                                    );*/
                                     return ImageSlider(
                                         imgUrls: imageSnapshot.data["data"]
                                             ["images"]);
@@ -395,25 +357,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "Achieve your goals with datamine",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.black54,
                                             fontFamily: "ProximaNova",
                                             fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        MdiIcons.brain,
-                                        color: Colors.black,
-                                        size: 40,
-                                      ),
-                                    ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'assets/img/brain.png',
+                                          height: 40,
+                                          width: 40,
+                                        )),
                                     Text(
                                       "Learn the latest skills",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         fontFamily: "ProximaNova",
                                         fontSize: 18,
                                       ),
@@ -422,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         MdiIcons.teach,
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         size: 40,
                                       ),
                                     ),
@@ -430,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       "Get Ready for a career",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         fontFamily: "ProximaNova",
                                         fontSize: 18,
                                       ),
@@ -439,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         MdiIcons.certificate,
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         size: 40,
                                       ),
                                     ),
@@ -447,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       "Earn a certificate",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         fontFamily: "ProximaNova",
                                         fontSize: 18,
                                       ),
@@ -456,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         Icons.people_outline,
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         size: 40,
                                       ),
                                     ),
@@ -464,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       "Upskill your organization",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.black54,
                                         fontFamily: "ProximaNova",
                                         fontSize: 18,
                                       ),
@@ -472,7 +433,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
-                              FutureBuilder(
+                              /*FutureBuilder(
                                   future: generalAPI(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
@@ -498,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           reviews: "--",
                                           users: "--");
                                     }
-                                  }),
+                                  }),*/
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
